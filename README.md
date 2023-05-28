@@ -5,7 +5,7 @@ When dealing with time durations or intervals in JavaScript, it's often useful t
 # Installation
 
 ```shell
-npm install timespan
+npm install @undercroft/timespan
 ```
 
 # Creating Timespans
