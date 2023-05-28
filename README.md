@@ -1,6 +1,9 @@
+[![Build Status](https://img.shields.io/github/actions/workflow/status/mikejg101/timespan/publish.yml)](https://img.shields.io/github/actions/workflow/status/mikejg101/timespan/publish.yml) [![Issues Status](https://img.shields.io/github/issues/mikejg101/timespan)](https://img.shields.io/github/issues/mikejg101/timespan) [![Pull Request Status](https://img.shields.io/github/issues-pr-raw/mikejg101/timespan)](https://img.shields.io/github/issues-pr-raw/mikejg101/timespan) [![NPM Version Status](https://img.shields.io/npm/v/@undercroft/timespan)](https://img.shields.io/npm/v/@undercroft/timespan) [![License Status](https://img.shields.io/github/license/mikejg101/timespan)](https://img.shields.io/github/license/mikejg101/timespan)  
+
+
 # Working with Timespans in JavaScript using the Timespan Class
 
-When dealing with time durations or intervals in JavaScript, it's often useful to have a reliable way to represent and manipulate them. The `Timespan` class provides a convenient and powerful solution for working with timespans in JavaScript. 
+When dealing with time durations or intervals in JavaScript, it's often useful to have a reliable way to represent and manipulate them. The `Timespan` class provides a convenient and powerful solution for working with timespans in JavaScript.
 
 # Installation
 
@@ -15,7 +18,7 @@ To create a `Timespan` object, we can use the `fromString` method or directly in
 # Creating a Timespan from a String
 
 ```javascript
-const { Timespan } = require('timespan');
+const { Timespan } = require('@undercroft/timespan');
 
 const input = '3d 5h 30m'; // Example input string representing a timespan
 const timespan = Timespan.fromString(input);
@@ -29,7 +32,7 @@ In the example above, we create a `Timespan` object from an input string using t
 # Creating a Timespan with Start and End Dates
 
 ```javascript
-const { Timespan } = require('timespan');
+const { Timespan } = require('@undercroft/timespan');
 
 const start = new Date('2023-01-01');
 const end = new Date('2023-01-15');
@@ -45,7 +48,7 @@ In this example, we create a `Timespan` object by providing the start and end da
 The Timespan class provides various methods to retrieve information about a timespan.
 
 ```javascript
-const { Timespan } = require('timespan');
+const { Timespan } = require('@undercroft/timespan');
 
 const start = new Date('2023-01-01');
 const end = new Date('2023-01-15');
@@ -64,7 +67,7 @@ In the example above, we retrieve the start and end dates of the timespan using 
 The Timespan class provides convenient methods to convert a timespan to different units of time.
 
 ```javascript
-const { Timespan } = require('timespan');
+const { Timespan } = require('@undercroft/timespan');
 
 const start = new Date('2023-01-01');
 const end = new Date('2023-01-15');
