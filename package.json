@@ -1,0 +1,65 @@
+{
+  "name": "@undercroft/timespan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "author": "Michael Goodwin <mikejg101@icloud.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/mikejg101/timespan",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mikejg101/timespan.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mikejg101/timespan/issues"
+  },
+  "scripts": {
+    "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable",
+    "build": "node tools/cleanup dist && tsc",
+    "license-check": "node tools/license-check",
+    "dep-check": "node tools/dep-check",
+    "clean": "node tools/cleanup",
+    "package": "npm run build && npm pack",
+    "test": "jest --no-cache --runInBand",
+    "test:cov": "jest --coverage --no-cache --runInBand",
+    "addscope": "node tools/package-json name @undercroft/timespan",
+    "badge:cov": "npx lcov-badge-generator -o ./badges/coverage.svg ./coverage/lcov.info",
+    "docs": "typedoc",
+    "check": "./.husky/pre-commit"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "@types/jest": "^27.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/parser": "^4.31.1",
+    "depcheck": "^1.4.3",
+    "dotenv": "^16.0.3",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jsdoc": "^44.2.5",
+    "eslint-plugin-no-underscore": "^0.2.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-sonarjs": "^0.19.0",
+    "husky": "^7.0.2",
+    "intersect": "^1.0.1",
+    "jest": "^27.2.0",
+    "license-compatibility-checker": "^0.3.0",
+    "pinst": "^2.1.6",
+    "prettier": "^2.4.0",
+    "semver": "^7.5.1",
+    "ts-jest": "^27.0.5",
+    "ts-loader": "^9.2.5",
+    "ts-node": "^10.9.1",
+    "typedoc": "^0.24.7",
+    "typedoc-github-wiki-theme": "^1.1.0",
+    "typedoc-plugin-markdown": "^3.15.3",
+    "typescript": "^4.4.3"
+  }
+}
