@@ -25,7 +25,7 @@
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable",
     "build": "node tools/cleanup dist && tsc",
-    "license-check": "node tools/license-check",
+    "license-check": "ts-node tools/license-check",
     "dep-check": "node tools/dep-check",
     "clean": "node tools/cleanup",
     "package": "npm run build && npm pack",
@@ -39,6 +39,7 @@
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
+    "@types/intersect": "^1.0.0",
     "@types/jest": "^27.0.1",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
