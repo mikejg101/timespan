@@ -1,194 +1,193 @@
 /**
  * Enumeration of time units.
  */
-export enum TimeUnit {
+export type TimeUnit =
   /**
    * Milliseconds
    */
-  'ms' = 'milliseconds',
+  | 'ms'
 
   /**
-   * Alias for milliseconds: 'milliseconds'
+   * Milliseconds
    */
-  'mss' = 'milliseconds',
+  | 'mss'
 
   /**
-   * Alias for milliseconds: 'milliseconds'
+   * Milliseconds
    */
-  'msec' = 'milliseconds',
+  | 'msec'
 
   /**
-   * Alias for milliseconds: 'milliseconds'
+   * Milliseconds
    */
-  'milliseconds' = 'milliseconds',
+  | 'milliseconds'
 
   /**
    * Seconds
    */
-  's' = 'seconds',
+  | 's'
 
   /**
-   * Alias for seconds: 'seconds'
+   * Seconds
    */
-  'sec' = 'seconds',
+  | 'sec'
 
   /**
-   * Alias for seconds: 'seconds'
+   * Seconds
    */
-  'secs' = 'seconds',
+  | 'secs'
 
   /**
-   * Alias for seconds: 'seconds'
+   * Seconds
    */
-  'second' = 'seconds',
+  | 'second'
 
   /**
-   * Alias for seconds: 'seconds'
+   * Seconds
    */
-  'seconds' = 'seconds',
+  | 'seconds'
 
   /**
    * Minutes
    */
-  'm' = 'minutes',
+  | 'm'
 
   /**
-   * Alias for minutes: 'minutes'
+   * Minutes
    */
-  'min' = 'minutes',
+  | 'min'
 
   /**
-   * Alias for minutes: 'minutes'
+   * Minutes
    */
-  'mins' = 'minutes',
+  | 'mins'
 
   /**
-   * Alias for minutes: 'minutes'
+   * Minutes
    */
-  'minute' = 'minutes',
+  | 'minute'
 
   /**
-   * Alias for minutes: 'minutes'
+   * Minutes
    */
-  'minutes' = 'minutes',
+  | 'minutes'
 
   /**
    * Hours
    */
-  'h' = 'hours',
+  | 'h'
 
   /**
-   * Alias for hours: 'hours'
+   * Hours
    */
-  'hr' = 'hours',
+  | 'hr'
 
   /**
-   * Alias for hours: 'hours'
+   * Hours
    */
-  'hrs' = 'hours',
+  | 'hrs'
 
   /**
-   * Alias for hours: 'hours'
+   * Hours
    */
-  'hour' = 'hours',
+  | 'hour'
 
   /**
-   * Alias for hours: 'hours'
+   * Hours
    */
-  'hours' = 'hours',
+  | 'hours'
 
   /**
    * Days
    */
-  'd' = 'days',
+  | 'd'
 
   /**
-   * Alias for days: 'days'
+   * Days
    */
-  'dys' = 'days',
+  | 'dys'
 
   /**
-   * Alias for days: 'days'
+   * Days
    */
-  'day' = 'days',
+  | 'day'
 
   /**
-   * Alias for days: 'days'
+   * Days
    */
-  'days' = 'days',
+  | 'days'
 
   /**
    * Weeks
    */
-  'w' = 'weeks',
+  | 'w'
 
   /**
-   * Alias for weeks: 'weeks'
+   * Weeks
    */
-  'wk' = 'weeks',
+  | 'wk'
 
   /**
-   * Alias for weeks: 'weeks'
+   * Weeks
    */
-  'wks' = 'weeks',
+  | 'wks'
 
   /**
-   * Alias for weeks: 'weeks'
+   * Weeks
    */
-  'week' = 'weeks',
+  | 'week'
 
   /**
-   * Alias for weeks: 'weeks'
+   * Weeks
    */
-  'weeks' = 'weeks',
+  | 'weeks'
 
   /**
    * Months
    */
-  'M' = 'months',
+  | 'M'
 
   /**
-   * Alias for months: 'months'
+   * Months
    */
-  'mo' = 'months',
+  | 'mo'
 
   /**
-   * Alias for months: 'months'
+   * Months
    */
-  'mos' = 'months',
+  | 'mos'
 
   /**
-   * Alias for months: 'months'
+   * Months
    */
-  'month' = 'months',
+  | 'month'
 
   /**
-   * Alias for months: 'months'
+   * Months
    */
-  'months' = 'months',
+  | 'months'
 
   /**
    * Years
    */
-  'y' = 'years',
+  | 'y'
 
   /**
-   * Alias for years: 'years'
+   * Years
    */
-  'yr' = 'years',
+  | 'yr'
 
   /**
-   * Alias for years: 'years'
+   * Years
    */
-  'yrs' = 'years',
+  | 'yrs'
 
   /**
-   * Alias for years: 'years'
+   * Years
    */
-  'year' = 'years',
+  | 'year'
 
   /**
-   * Alias for years: 'years'
+   * Years
    */
-  'years' = 'years',
-}
+  | 'years';

@@ -1,53 +1,256 @@
-import { AbbreviatedTimeUnit } from './abbreviated-time-unit';
 import { conversionTable } from './time-conversion';
-import { TimeUnit } from './time-unit';
 import { TimeFrame } from './timeframe';
 
+/**
+ * Represents a time span between two dates.
+ */
 export class Timespan {
+  /**
+   * The start of the time span.
+   */
   private readonly startDate: Date;
+
+  /**
+   * The end of the time span.
+   */
   private readonly endDate: Date;
+
+  /**
+   * The number of milliseconds between the two dates.
+   */
   private readonly timeDiff: number;
+
+  /**
+   * We precalculate the string value when the Timespan
+   * is created so you don't incure as much memory cost generating
+   * it when you want to use it.
+   */
   private readonly stringValue: string;
+
+  /**
+   * We go ahead and generate the TimeFrame when the Timespan
+   * is created. This way you can go ahead and get the timeframe
+   * at only point without incuring any extra memory cost.
+   */
   private readonly timeFrame: TimeFrame;
-  private static readonly inputStringPattern = /(\d+)\s*([a-zA-Z]+)/g;
+
+  /**
+   * This is the index of the value in the inputString
+   * regex match.
+   */
+  private static readonly inputRegexValueIndex = 1;
+
+  /**
+   * This is the index of the unit in the inputString
+   * regex match.
+   */
+  private static readonly inputRegexUnitIndex = 2;
+
+  /**
+   * The number of milliseconds in a second.
+   * @returns 1000
+   */
+  private static readonly millisecondsPerSecond = 1000;
+
+  /**
+   * The number of seconds in a minute.
+   * @returns 60
+   */
+  private static readonly secondsPerMinute = 60;
+
+  /**
+   * The number of minutes in an hour.
+   * @returns 60
+   */
+  private static readonly minutesPerHour = 60;
+
+  /**
+   * The number of hours in a day.
+   * @returns 24
+   */
+  private static readonly hoursPerDay = 24;
+
+  /**
+   * The number of days in a week.
+   * @returns 7
+   */
+  private static readonly daysPerWeek = 7;
+
+  /**
+   * Admittedly, this one could be improved. This is a guess
+   * based on 365 and ignores leap years. It might be a better
+   * idea to calculate the actual days between the two dates
+   * rather then using this.
+   * @returns 365
+   */
+  private static readonly daysPerYear = 365;
+
+  /**
+   * Admittedly, this one could be improved. This is a guess
+   * based on the average number of days. It might be a better
+   * idea to calculate the actual months between the two dates
+   * rather then using this.
+   * @returns 30.437
+   */
+  private static readonly averageDaysPerMonth = 30.437;
+
+  /**
+   * This sets the max allowable input string length to help reduce Regex
+   * Denial of Service attacks. This combined with some other strategies should
+   * help reduce the vulnerability. It is still recommended to clean any input
+   * you are using, especially if it originates from an uncontrolled source
+   * such as a user typing input into an input field on the internet.
+   */
+  private static readonly maxInputStringLength = 75;
+
+  /**
+   * /(\d+)\s*([^\s\d]+)/g
+   *
+   * This regex pattern /(\d+)\s*([^\s\d]+)/g aims to match and
+   * capture sequences in the input string where one or more digits are
+   * followed by optional whitespace characters (\d+\s*) followed by one
+   * or more characters that are not whitespace or digits ([^\s\d]+).
+   *
+   * No regex is perfect. It is recommended that you clean any input
+   * you are using, especially if it originates from an uncontrolled source
+   * such as a user typing input into an input field on the internet.
+   *
+   * - (\d+):
+   * This part matches one or more digits (\d+) and captures
+   * them within parentheses ((\d+)). The parentheses create a capturing
+   * group, allowing you to extract the matched digits. For example,
+   * if the input is "123", this part will match "123".
+   *
+   * - \s*:
+   * This part matches zero or more whitespace characters (\s*). The
+   * \s represents any whitespace character, and the * quantifier allows
+   * for zero or more occurrences of the preceding whitespace character.
+   * It allows for optional whitespace between the digits and the letters.
+   *
+   * - ([^\s\d]+): This part matches one or more characters that are not
+   * whitespace or digits. [^\s\d]: This character set matches any character
+   * that is not a whitespace character or a digit. ^ within the square brackets
+   * [^...] represents negation, indicating that any character not listed
+   * within the brackets should be matched. \s represents any whitespace character.
+   * \d represents any digit character. +: This quantifier specifies that one or
+   * more occurrences of the preceding character set should be matched.
+   *
+   * - g:
+   * The g flag stands for "global" and indicates that the regex should
+   * search for all matches in the input string, rather than stopping after
+   * the first match.
+   *
+   * A few examples of acceptable inputs are:
+   *
+   * 1y 2M 3w 4d 5h 6m 7s 8ms
+   *
+   * 1yr 2mos 3wks 4dys 5hrs 6mins 7secs 8mss
+   *
+   * 2years 1month 3weeks 4days
+   */
+  private static readonly inputStringPattern = /(\d+)\s*([^\s\d]+)/g;
+
+  /**
+   * /^[a-zA-Z0-9\s]+$/
+   *
+   * This regex pattern ensures that the entire input string consists of
+   * one or more uppercase or lowercase letters, digits, or whitespace
+   * characters. It does not allow any other characters in the string.
+   *
+   * This Regex, combined with some other strategies should
+   * help reduce the vulnerability. It is still recommended to clean any input
+   * you are using, especially if it originates from an uncontrolled source
+   * such as a user typing input into an input field on the internet.
+   *
+   * - ^:
+   * This anchor asserts the start of the string. It specifies that the
+   * matching pattern should start at the beginning of the string.
+   *
+   * - [a-zA-Z0-9\s]+: This character set specifies the allowed characters
+   * in the string. It matches one or more occurrences (+) of any uppercase
+   * or lowercase letter ([a-zA-Z]), digit (0-9), or whitespace character (\s).
+   *
+   * - $: This anchor asserts the end of the string. It specifies that the
+   * matching pattern should end at the end of the string.
+   *
+   * "Hello123": This input matches the pattern because it consists of
+   * only letters and digits.
+   *
+   * "Test String": This input matches the pattern because it consists of
+   * only letters and whitespace characters.
+   *
+   * "123-456": This input does not match the pattern because it contains
+   * a hyphen character, which is not allowed.
+   *
+   * "@#$": This input does not match the pattern because it contains special
+   * characters that are not part of the allowed character set.
+   */
+  private static readonly allowedWhitspacePattern = /^[a-zA-Z0-9\s]+$/;
 
   /**
    * Create a Timespan instance from a string input.
+   * @example - "1y 2M 3w 4d 5h 6m 7s 8ms"
+   * @example - "1yr 2mos 3wks 4dys 5hrs 6mins 7secs 8mss"
+   * @example - "2years 1month 3weeks 4days"
    * @param input - The input string representing the timespan.
    * @returns A Timespan instance representing the parsed timespan.
    * @throws Error if the input is invalid or contains an invalid unit.
    */
   public static fromString(input: string): Timespan {
+    // Limit the possible input string to prevent abuse.
+    if (input.length > Timespan.maxInputStringLength) {
+      throw new Error(`Invalid input string`);
+    }
+
+    // Whitelist specific characters.
+    if (!Timespan.allowedWhitspacePattern.test(input)) {
+      throw new Error(`Invalid input string`);
+    }
+
+    // Get a running tally of the total milliseconds represented
+    // by the string input.
     let totalMilliseconds = 0;
 
+    // Start matching the regex.
     let match = Timespan.inputStringPattern.exec(input);
+
+    // Check to see if we don't have a match.
     if (!match) {
       throw new Error(`Invalid unit`);
     }
+
+    // Loop over the matches as we make more matches.
     while (match) {
-      const value = Number(match[1]);
-      const unit: string = match[2];
+      // Get the value from the value index in the current match.
+      const value = Number(match[Timespan.inputRegexValueIndex]);
+      // Get the unit from the unit index in the current match.
+      const unit: string = match[Timespan.inputRegexUnitIndex];
 
-      if (this.isKeyOf(unit, TimeUnit)) {
-        const keyUnit = unit as keyof typeof TimeUnit;
-        const numericValue = Number(value);
-
-        // Retrieve the conversion factor from the conversion table
-        const conversionFactor = conversionTable.get(
-          TimeUnit[keyUnit]
-        ) as number;
+      // Make sure that the unit is actually an acceptable unit.
+      if (Timespan.isKeyOf(unit, conversionTable)) {
+        // // Retrieve the conversion factor from the conversion table
+        const conversionFactor = conversionTable[unit].conversionFactor;
 
         // Calculate the total milliseconds based on the value and conversion factor
-        totalMilliseconds += numericValue * conversionFactor;
+        totalMilliseconds += value * conversionFactor;
       } else {
+        // If we don't find the unit, throw an error that let's the consumer
+        // know what the problematic unit was.
         throw new Error(`Invalid unit: ${value}${unit}`);
       }
 
+      // Match the next and run the loop again.
       match = this.inputStringPattern.exec(input);
     }
 
-    const endDate = new Date();
-    const startDate = new Date(endDate.getTime() - totalMilliseconds);
+    // Set the start date as the date we want to count from.
+    const startDate = new Date();
+
+    // Set the end date to however many milliseconds we have calculated.
+    const endDate = new Date(startDate.getTime() + totalMilliseconds);
+
+    // Return the new timespan to the consumer. Since the timespan does all of
+    // timeframe and string calculations on initialization, our job here is done.
     return new Timespan(startDate, endDate);
   }
 
@@ -109,7 +312,7 @@ export class Timespan {
    * @returns The duration in seconds.
    */
   public toSeconds(): number {
-    return this.toMilliseconds() / 1000;
+    return this.toMilliseconds() / Timespan.millisecondsPerSecond;
   }
 
   /**
@@ -117,7 +320,7 @@ export class Timespan {
    * @returns The duration in minutes.
    */
   public toMinutes(): number {
-    return this.toSeconds() / 60;
+    return this.toSeconds() / Timespan.secondsPerMinute;
   }
 
   /**
@@ -125,7 +328,7 @@ export class Timespan {
    * @returns The duration in hours.
    */
   public toHours(): number {
-    return this.toMinutes() / 60;
+    return this.toMinutes() / Timespan.minutesPerHour;
   }
 
   /**
@@ -133,7 +336,7 @@ export class Timespan {
    * @returns The duration in days.
    */
   public toDays(): number {
-    return this.toHours() / 24;
+    return this.toHours() / Timespan.hoursPerDay;
   }
 
   /**
@@ -141,7 +344,7 @@ export class Timespan {
    * @returns The duration in weeks.
    */
   public toWeeks(): number {
-    return this.toDays() / 7;
+    return this.toDays() / Timespan.daysPerWeek;
   }
 
   /**
@@ -149,7 +352,7 @@ export class Timespan {
    * @returns The duration in months.
    */
   public toMonths(): number {
-    return this.toDays() / 30.4167;
+    return this.toDays() / Timespan.averageDaysPerMonth;
   }
 
   /**
@@ -157,7 +360,7 @@ export class Timespan {
    * @returns The duration in years.
    */
   public toYears(): number {
-    return this.toDays() / 365;
+    return this.toDays() / Timespan.daysPerYear;
   }
 
   /**
@@ -179,17 +382,21 @@ export class Timespan {
 
     let remainingTime = milliseconds;
 
-    // Iterate through the conversionTable and calculate the value for each unit
-    for (const [unit, conversionFactor] of conversionTable.entries()) {
-      const value = Math.floor(remainingTime / conversionFactor);
-      timeFrame[unit] = value;
-      remainingTime -= value * conversionFactor;
-
+    for (const unit of Object.keys(timeFrame)) {
+      if (Timespan.isKeyOf(unit, conversionTable)) {
+        // Retrieve the conversion factor from the conversion table
+        const conversionFactor = conversionTable[unit].conversionFactor;
+        // calculate the number of units with this conversion factor.
+        const value = Math.floor(remainingTime / conversionFactor);
+        // Set the value in the timeframe.
+        timeFrame[unit] = value;
+        // Calculate the total remainingTime based on the value and conversion factor
+        remainingTime -= value * conversionFactor;
+      }
       if (remainingTime === 0) {
         break;
       }
     }
-
     return timeFrame;
   }
 
@@ -202,18 +409,14 @@ export class Timespan {
     const timespanParts: string[] = [];
 
     // Iterate through the timeFrame and generate the string parts for non-zero values
-    for (const [unit, value] of Object.entries(timeFrame)) {
-      if (Timespan.isKeyOf(unit, TimeUnit)) {
-        const keyUnit = unit as keyof typeof TimeUnit;
-        const numericValue = Number(value);
-
-        // Check if the value is non-zero and append to the timespanParts
-        if (numericValue !== 0 && TimeUnit[keyUnit]) {
-          timespanParts.push(`${numericValue}${AbbreviatedTimeUnit[keyUnit]}`);
-        }
+    for (const unit of Object.keys(timeFrame)) {
+      const numericValue = Number(timeFrame[unit]);
+      // Check if the value is non-zero and append to the timespanParts
+      if (numericValue !== 0 && Timespan.isKeyOf(unit, conversionTable)) {
+        const abbreviation = conversionTable[unit].abbreviation;
+        timespanParts.push(`${numericValue}${abbreviation}`);
       }
     }
-
     return timespanParts.join(' ');
   }
 
@@ -225,7 +428,7 @@ export class Timespan {
    */
   private static isKeyOf<T extends string>(
     unit: string,
-    obj: Record<T, unknown>
+    obj: Record<T, unknown>,
   ): unit is T {
     return Object.prototype.hasOwnProperty.call(obj, unit);
   }
