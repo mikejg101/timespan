@@ -169,6 +169,7 @@ export class Timespan {
       milliseconds: 0,
     };
 
+    // Start matching the regex.
     let match = Timespan.inputStringPattern.exec(input);
 
     // Check to see if we don't have a match.
@@ -184,6 +185,7 @@ export class Timespan {
       const plural = this.dateUnitCalculator.pluralUnit(unit as TimeUnit);
       timeframe[plural] = value;
 
+      // Match the next and run the loop again.
       match = this.inputStringPattern.exec(input);
     }
 
@@ -506,35 +508,6 @@ export class Timespan {
     timeFrame.seconds = Math.floor(remainingTime / millisecondsPerSeconds);
     remainingTime %= millisecondsPerSeconds;
     timeFrame.milliseconds = remainingTime;
-
-    // const days = Math.floor(remainingTime / millisecondsPerDay);
-    // remainingTime %= millisecondsPerDay;
-
-    // const hours = Math.floor(remainingTime / Timespan.millisecondsPerHour);
-    // remainingTime %= Timespan.millisecondsPerHour;
-
-    // const minutes = Math.floor(remainingTime / Timespan.millisecondsPerMinute);
-    // remainingTime %= Timespan.millisecondsPerMinute;
-
-    // const seconds = Math.floor(remainingTime / Timespan.millisecondsPerSecond);
-    // const milliseconds = remainingTime % Timespan.millisecondsPerSecond;
-
-    // const timeUnits: TimeUnit[] = [
-    //   'weeks',
-    //   'days',
-    //   'hours',
-    //   'minutes',
-    //   'seconds',
-    //   'milliseconds',
-    // ];
-
-    // for (const unit of timeUnits) {
-    //   const millisecondsInUnit =
-    //     Timespan.dateUnitCalculator.millisecondsPerUnit(unit);
-    //   timeFrame[unit] = Math.floor(remainingTime / millisecondsInUnit);
-    //   remainingTime %= millisecondsInUnit;
-    //   console.log({ unit, millisecondsInUnit, remainingTime });
-    // }
 
     return timeFrame;
   }

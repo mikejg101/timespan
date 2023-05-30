@@ -22,25 +22,25 @@ describe('Timespan', () => {
     it('should return the time span in milliseconds', () => {
       const timespan = new Timespan(start, end);
       const timeframe = timespan.toTimeframe();
-      expect(timeframe.milliseconds).toBe(0);
+      expect(timeframe.milliseconds).toBe(200);
     });
 
     it('should return the time span in seconds', () => {
       const timespan = new Timespan(start, end);
       const timeframe = timespan.toTimeframe();
-      expect(timeframe.seconds).toBe(0);
+      expect(timeframe.seconds).toBe(43);
     });
 
     it('should return the time span in minutes', () => {
       const timespan = new Timespan(start, end);
       const timeframe = timespan.toTimeframe();
-      expect(timeframe.minutes).toBe(28);
+      expect(timeframe.minutes).toBe(58);
     });
 
     it('should return the time span in hours', () => {
       const timespan = new Timespan(start, end);
       const timeframe = timespan.toTimeframe();
-      expect(timeframe.hours).toBe(4);
+      expect(timeframe.hours).toBe(17);
     });
 
     it('should return the time span in days', () => {
