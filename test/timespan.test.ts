@@ -132,7 +132,7 @@ describe('Timespan', () => {
   });
 
   describe('fromString', () => {
-    const dataset = [
+    const blacklistedCharacters = [
       '!',
       '@',
       '#',
@@ -170,6 +170,26 @@ describe('Timespan', () => {
       '好',
       '世',
       '界',
+    ];
+
+    const allowedStrings = [
+      [
+        '1years 1months 2weeks 6days 17hours 58minutes 43seconds 200milliseconds',
+        '1y 1M 2w 6d 17h 58m 43s 200ms',
+      ],
+      [
+        '1year 1month 2week 6day 17hour 58minute 43second 200millisecond',
+        '1y 1M 2w 6d 17h 58m 43s 200ms',
+      ],
+      [
+        '1yrs 1mos 2wks 6dys 17hrs 58mins 43secs 200msec',
+        '1y 1M 2w 6d 17h 58m 43s 200ms',
+      ],
+      [
+        '1yr 1mo 2wk 6dy 17hr 58min 43sec 200mss',
+        '1y 1M 2w 6d 17h 58m 43s 200ms',
+      ],
+      ['1y 1M 2w 6d 17h 58m 43s 200ms', '1y 1M 2w 6d 17h 58m 43s 200ms'],
     ];
 
     it('should create a Timespan object from a valid string input', () => {
@@ -239,8 +259,16 @@ describe('Timespan', () => {
       );
     });
 
-    it.each(dataset)(
-      'should throw an error for input that contains invalid character ($)',
+    it.each(allowedStrings)(
+      'should return the correct string for %s',
+      (inputString, expectedString) => {
+        const outputString = Timespan.fromString(inputString).toString();
+        expect(outputString).toBe(expectedString);
+      },
+    );
+
+    it.each(blacklistedCharacters)(
+      'should throw an error for input that contains invalid character %s',
       (character) => {
         expect(() => Timespan.fromString(character)).toThrowError(
           'Invalid input string',
@@ -248,19 +276,19 @@ describe('Timespan', () => {
       },
     );
 
-    it('should throw an error for input that contains invalid character @', () => {
+    it('should throw an error for input that contains invalid character " Hello World"', () => {
       expect(() => Timespan.fromString(' Hello World')).toThrowError(
         'Invalid unit',
       );
     });
 
-    it('should throw an error for input that contains invalid character @', () => {
+    it('should throw an error for input that contains invalid character "Hello\\tWorld"', () => {
       expect(() => Timespan.fromString('Hello\tWorld')).toThrowError(
         'Invalid unit',
       );
     });
 
-    it('should throw an error for input that contains invalid character @', () => {
+    it('should throw an error for input that contains invalid character "Hello\\nWorld"', () => {
       expect(() => Timespan.fromString('Hello\nWorld')).toThrowError(
         'Invalid unit',
       );
