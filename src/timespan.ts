@@ -115,25 +115,16 @@ export class Timespan {
    * you are using, especially if it originates from an uncontrolled source
    * such as a user typing input into an input field on the internet.
    *
-   * - (\d+):
-   * This part matches one or more digits (\d+) and captures
-   * them within parentheses ((\d+)). The parentheses create a capturing
-   * group, allowing you to extract the matched digits. For example,
-   * if the input is "123", this part will match "123".
+   * - (\d{0,10}):
+   * This part captures a sequence of digits (0-9) that can occur between
+   * 0 and 10 times. The parentheses ( ) indicate a capturing group, which
+   * means the matched digits will be stored and accessible separately.
    *
-   * - \s*:
-   * This part matches zero or more whitespace characters (\s*). The
-   * \s represents any whitespace character, and the * quantifier allows
-   * for zero or more occurrences of the preceding whitespace character.
-   * It allows for optional whitespace between the digits and the letters.
-   *
-   * - ([^\s\d]+): This part matches one or more characters that are not
-   * whitespace or digits. [^\s\d]: This character set matches any character
-   * that is not a whitespace character or a digit. ^ within the square brackets
-   * [^...] represents negation, indicating that any character not listed
-   * within the brackets should be matched. \s represents any whitespace character.
-   * \d represents any digit character. +: This quantifier specifies that one or
-   * more occurrences of the preceding character set should be matched.
+   * - ([^\s\d]+): This part captures one or more characters that are not
+   * whitespace and not digits. The square brackets [ ] define a character
+   * class, and the ^ at the beginning of the class negates it. So [^\s\d]
+   * matches any character that is not a whitespace character or a digit.
+   * The + quantifier specifies that one or more characters should be matched.
    *
    * - g:
    * The g flag stands for "global" and indicates that the regex should
@@ -148,7 +139,7 @@ export class Timespan {
    *
    * 2years 1month 3weeks 4days
    */
-  private static readonly inputStringPattern = /(\d+)\s*([^\s\d]+)/g;
+  private static readonly inputStringPattern = /(\d{0,10})([^\s\d]+)/g;
 
   /**
    * /^[a-zA-Z0-9\s]+$/
@@ -228,7 +219,7 @@ export class Timespan {
 
       // Make sure that the unit is actually an acceptable unit.
       if (Timespan.isKeyOf(unit, conversionTable)) {
-        // // Retrieve the conversion factor from the conversion table
+        // Retrieve the conversion factor from the conversion table
         const conversionFactor = conversionTable[unit].conversionFactor;
 
         // Calculate the total milliseconds based on the value and conversion factor

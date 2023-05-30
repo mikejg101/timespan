@@ -86,6 +86,7 @@ export const conversionTable = {
   days: dayConversion,
   day: dayConversion,
   dys: dayConversion,
+  dy: dayConversion,
   d: dayConversion,
 
   // Hours
@@ -111,6 +112,7 @@ export const conversionTable = {
 
   // Milliseconds
   milliseconds: millisecondConversion,
+  millisecond: millisecondConversion,
   msec: millisecondConversion,
   mss: millisecondConversion,
   ms: millisecondConversion,
