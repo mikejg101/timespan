@@ -1,56 +1,117 @@
-import { TimeUnit } from './time-unit';
+const yearConversion = {
+  default: 'year',
+  plural: 'years',
+  abbreviation: 'y',
+  aliases: ['yrs', 'yr', 'y'],
+  conversionFactor: 1000 * 60 * 60 * 24 * 365,
+};
 
-export const conversionTable: Map<TimeUnit, number> = new Map([
+const monthConversion = {
+  default: 'month',
+  plural: 'months',
+  abbreviation: 'M',
+  aliases: ['mos', 'mo', 'M'],
+  conversionFactor: 1000 * 60 * 60 * 24 * 30.437,
+};
+
+const weekConversion = {
+  default: 'week',
+  plural: 'weeks',
+  abbreviation: 'w',
+  aliases: ['wks', 'wk', 'w'],
+  conversionFactor: 1000 * 60 * 60 * 24 * 7,
+};
+
+const dayConversion = {
+  default: 'day',
+  plural: 'days',
+  abbreviation: 'd',
+  aliases: ['dys', 'dy', 'd'],
+  conversionFactor: 1000 * 60 * 60 * 24,
+};
+
+const hourConversion = {
+  default: 'hour',
+  plural: 'hours',
+  abbreviation: 'h',
+  aliases: ['hrs', 'hr', 'h'],
+  conversionFactor: 1000 * 60 * 60,
+};
+
+const minuteConversion = {
+  default: 'minute',
+  plural: 'minutes',
+  abbreviation: 'm',
+  aliases: ['mins', 'min', 'm'],
+  conversionFactor: 1000 * 60,
+};
+const secondConversion = {
+  default: 'second',
+  plural: 'seconds',
+  abbreviation: 's',
+  aliases: ['secs', 'sec', 's'],
+  conversionFactor: 1000,
+};
+const millisecondConversion = {
+  default: 'millisecond',
+  plural: 'milliseconds',
+  abbreviation: 'ms',
+  aliases: ['msec', 'mss', 'ms'],
+  conversionFactor: 1,
+};
+
+export const conversionTable = {
   // Years
-  [TimeUnit.years, 31536000000],
-  [TimeUnit.year, 31536000000],
-  [TimeUnit.yrs, 31536000000],
-  [TimeUnit.y, 31536000000],
+  years: yearConversion,
+  year: yearConversion,
+  yrs: yearConversion,
+  yr: yearConversion,
+  y: yearConversion,
 
   // Months
-  [TimeUnit.months, 2592000000],
-  [TimeUnit.month, 2592000000],
-  [TimeUnit.mos, 2592000000],
-  [TimeUnit.mo, 2592000000],
-  [TimeUnit.M, 2592000000],
+  months: monthConversion,
+  month: monthConversion,
+  mos: monthConversion,
+  mo: monthConversion,
+  M: monthConversion,
 
   // Weeks
-  [TimeUnit.weeks, 604800000],
-  [TimeUnit.week, 604800000],
-  [TimeUnit.wks, 604800000],
-  [TimeUnit.wk, 604800000],
-  [TimeUnit.w, 604800000],
+  weeks: weekConversion,
+  week: weekConversion,
+  wks: weekConversion,
+  wk: weekConversion,
+  w: weekConversion,
 
   // Days
-  [TimeUnit.days, 86400000],
-  [TimeUnit.day, 86400000],
-  [TimeUnit.dys, 86400000],
-  [TimeUnit.d, 86400000],
+  days: dayConversion,
+  day: dayConversion,
+  dys: dayConversion,
+  d: dayConversion,
 
   // Hours
-  [TimeUnit.hours, 3600000],
-  [TimeUnit.hour, 3600000],
-  [TimeUnit.hrs, 3600000],
-  [TimeUnit.hr, 3600000],
-  [TimeUnit.h, 3600000],
+  hours: hourConversion,
+  hour: hourConversion,
+  hrs: hourConversion,
+  hr: hourConversion,
+  h: hourConversion,
 
   // Minutes
-  [TimeUnit.minutes, 60000],
-  [TimeUnit.minute, 60000],
-  [TimeUnit.mins, 60000],
-  [TimeUnit.min, 60000],
-  [TimeUnit.m, 60000],
+  minutes: minuteConversion,
+  minute: minuteConversion,
+  mins: minuteConversion,
+  min: minuteConversion,
+  m: minuteConversion,
 
   // Seconds
-  [TimeUnit.seconds, 1000],
-  [TimeUnit.second, 1000],
-  [TimeUnit.secs, 1000],
-  [TimeUnit.sec, 1000],
-  [TimeUnit.s, 1000],
+  seconds: secondConversion,
+  second: secondConversion,
+  secs: secondConversion,
+  sec: secondConversion,
+  s: secondConversion,
 
   // Milliseconds
-  [TimeUnit.milliseconds, 1],
-  [TimeUnit.msec, 1],
-  [TimeUnit.mss, 1],
-  [TimeUnit.ms, 1],
-]);
+  milliseconds: millisecondConversion,
+  msec: millisecondConversion,
+  mss: millisecondConversion,
+  ms: millisecondConversion,
+};

@@ -2,6 +2,7 @@
  * Represents a time frame with various units of time.
  */
 export interface TimeFrame {
+  [key: string]: number | undefined;
   /**
    * The amount of time in milliseconds.
    */
