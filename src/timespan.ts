@@ -104,12 +104,12 @@ export class Timespan {
   private static readonly maxInputStringLength = 75;
 
   /**
-   * /(\d+)\s*([^\s\d]+)/g
+   * /(\d{0,10})([^\s\d]+)/g
    *
-   * This regex pattern /(\d+)\s*([^\s\d]+)/g aims to match and
-   * capture sequences in the input string where one or more digits are
-   * followed by optional whitespace characters (\d+\s*) followed by one
-   * or more characters that are not whitespace or digits ([^\s\d]+).
+   * This regex pattern /(\d{0,10})([^\s\d]+)/g aims to match and
+   * a sequence of digits (0-9) of up to 10 characters, captured in the first group. 
+   * A series of one or more non-whitespace, non-digit characters, captured in 
+   * the second group.
    *
    * No regex is perfect. It is recommended that you clean any input
    * you are using, especially if it originates from an uncontrolled source
