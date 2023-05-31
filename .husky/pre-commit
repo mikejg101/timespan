@@ -9,3 +9,5 @@ npm run dep-check
 npm run test:cov
 npm run badge:cov
 git add badges/\*
+npm run changelog
+git add changelog.md
