@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## 1.0.4 Unreleased
+- chore: migrated tools to typescript
 - docs: corrected regex comment
 - refactor: adjusted string input regex
 - feat: timespan improvements
