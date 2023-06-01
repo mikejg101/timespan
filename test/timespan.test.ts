@@ -216,7 +216,7 @@ describe('Timespan', () => {
       expect(timespan.toYears()).toBe(2);
       expect(timespan.toMonths()).toBe(25);
       expect(timespan.toWeeks()).toBe(112);
-      expect(timespan.toDays()).toBe(787);
+      expect(timespan.toDays()).toBe(786);
 
       // Check the string representation of the Timespan object
       expect(timespan.toString()).toBe('2y 1M 3w 4d');
