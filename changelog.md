@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## 1.0.4 Unreleased
+- chore: updated changelog and tests
 - chore: added community standard documents
 - feat: improved calculations
 - docs: added code of conduct
