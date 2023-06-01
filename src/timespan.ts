@@ -1,10 +1,12 @@
-import { conversionTable } from './time-conversion';
 import { TimeFrame } from './timeframe';
+import { TimeUnit } from './time-unit';
+import { DateUnitCalculator } from './date-unit-calculator';
 
 /**
  * Represents a time span between two dates.
  */
 export class Timespan {
+  private static dateUnitCalculator = new DateUnitCalculator();
   /**
    * The start of the time span.
    */
@@ -47,52 +49,10 @@ export class Timespan {
   private static readonly inputRegexUnitIndex = 2;
 
   /**
-   * The number of milliseconds in a second.
-   * @returns 1000
-   */
-  private static readonly millisecondsPerSecond = 1000;
-
-  /**
-   * The number of seconds in a minute.
-   * @returns 60
-   */
-  private static readonly secondsPerMinute = 60;
-
-  /**
-   * The number of minutes in an hour.
-   * @returns 60
-   */
-  private static readonly minutesPerHour = 60;
-
-  /**
-   * The number of hours in a day.
-   * @returns 24
-   */
-  private static readonly hoursPerDay = 24;
-
-  /**
    * The number of days in a week.
    * @returns 7
    */
   private static readonly daysPerWeek = 7;
-
-  /**
-   * Admittedly, this one could be improved. This is a guess
-   * based on 365 and ignores leap years. It might be a better
-   * idea to calculate the actual days between the two dates
-   * rather then using this.
-   * @returns 365
-   */
-  private static readonly daysPerYear = 365;
-
-  /**
-   * Admittedly, this one could be improved. This is a guess
-   * based on the average number of days. It might be a better
-   * idea to calculate the actual months between the two dates
-   * rather then using this.
-   * @returns 30.437
-   */
-  private static readonly averageDaysPerMonth = 30.437;
 
   /**
    * This sets the max allowable input string length to help reduce Regex
@@ -107,8 +67,8 @@ export class Timespan {
    * /(\d{0,10})([^\s\d]+)/g
    *
    * This regex pattern /(\d{0,10})([^\s\d]+)/g aims to match and
-   * a sequence of digits (0-9) of up to 10 characters, captured in the first group. 
-   * A series of one or more non-whitespace, non-digit characters, captured in 
+   * a sequence of digits (0-9) of up to 10 characters, captured in the first group.
+   * A series of one or more non-whitespace, non-digit characters, captured in
    * the second group.
    *
    * No regex is perfect. It is recommended that you clean any input
@@ -198,11 +158,17 @@ export class Timespan {
       throw new Error(`Invalid input string`);
     }
 
-    // Get a running tally of the total milliseconds represented
-    // by the string input.
-    let totalMilliseconds = 0;
+    const timeframe: TimeFrame = {
+      years: 0,
+      months: 0,
+      weeks: 0,
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+      milliseconds: 0,
+    };
 
-    // Start matching the regex.
     let match = Timespan.inputStringPattern.exec(input);
 
     // Check to see if we don't have a match.
@@ -212,25 +178,12 @@ export class Timespan {
 
     // Loop over the matches as we make more matches.
     while (match) {
-      // Get the value from the value index in the current match.
       const value = Number(match[Timespan.inputRegexValueIndex]);
-      // Get the unit from the unit index in the current match.
       const unit: string = match[Timespan.inputRegexUnitIndex];
 
-      // Make sure that the unit is actually an acceptable unit.
-      if (Timespan.isKeyOf(unit, conversionTable)) {
-        // Retrieve the conversion factor from the conversion table
-        const conversionFactor = conversionTable[unit].conversionFactor;
+      const plural = this.dateUnitCalculator.pluralUnit(unit as TimeUnit);
+      timeframe[plural] = value;
 
-        // Calculate the total milliseconds based on the value and conversion factor
-        totalMilliseconds += value * conversionFactor;
-      } else {
-        // If we don't find the unit, throw an error that let's the consumer
-        // know what the problematic unit was.
-        throw new Error(`Invalid unit: ${value}${unit}`);
-      }
-
-      // Match the next and run the loop again.
       match = this.inputStringPattern.exec(input);
     }
 
@@ -238,11 +191,123 @@ export class Timespan {
     const startDate = new Date();
 
     // Set the end date to however many milliseconds we have calculated.
-    const endDate = new Date(startDate.getTime() + totalMilliseconds);
+    const endDate = new Date(startDate);
+
+    endDate.setFullYear(endDate.getFullYear() + timeframe.years);
+    endDate.setMonth(endDate.getMonth() + timeframe.months);
+    endDate.setDate(endDate.getDate() + timeframe.weeks * Timespan.daysPerWeek);
+    endDate.setDate(endDate.getDate() + timeframe.days);
+    endDate.setHours(endDate.getHours() + timeframe.hours);
+    endDate.setMinutes(endDate.getMinutes() + timeframe.minutes);
+    endDate.setSeconds(endDate.getSeconds() + timeframe.seconds);
+    endDate.setMilliseconds(endDate.getMilliseconds() + timeframe.milliseconds);
 
     // Return the new timespan to the consumer. Since the timespan does all of
     // timeframe and string calculations on initialization, our job here is done.
     return new Timespan(startDate, endDate);
+  }
+
+  /**
+   * Creates a Timespan object from a specified number of milliseconds.
+   * @param milliseconds - The number of milliseconds for the timespan.
+   * @param startDate - Optional start date for the timespan. If not provided, the current date is used.
+   * @returns A Timespan object representing the specified number of milliseconds.
+   */
+  public static fromMilliseconds(
+    milliseconds: number,
+    startDate?: Date,
+  ): Timespan {
+    const start = startDate ? startDate : new Date();
+    const end = Timespan.dateUnitCalculator.addUnits(
+      'milliseconds',
+      milliseconds,
+      startDate ? startDate : new Date(),
+    );
+    return new Timespan(start, end);
+  }
+
+  /**
+   * Creates a Timespan object from a specified number of seconds.
+   * @param seconds - The number of seconds for the timespan.
+   * @param startDate - Optional start date for the timespan. If not provided, the current date is used.
+   * @returns A Timespan object representing the specified number of seconds.
+   */
+  public static fromSeconds(seconds: number, startDate?: Date): Timespan {
+    const start = startDate ? startDate : new Date();
+    const end = Timespan.dateUnitCalculator.addUnits('seconds', seconds, start);
+    return new Timespan(start, end);
+  }
+
+  /**
+   * Creates a Timespan object from a specified number of minutes.
+   * @param minutes - The number of minutes for the timespan.
+   * @param startDate - Optional start date for the timespan. If not provided, the current date is used.
+   * @returns A Timespan object representing the specified number of minutes.
+   */
+  public static fromMinutes(minutes: number, startDate?: Date): Timespan {
+    const start = startDate ? startDate : new Date();
+    const end = Timespan.dateUnitCalculator.addUnits('minutes', minutes, start);
+    return new Timespan(start, end);
+  }
+
+  /**
+   * Creates a Timespan object from a specified number of hours.
+   * @param hours - The number of hours for the timespan.
+   * @param startDate - Optional start date for the timespan. If not provided, the current date is used.
+   * @returns A Timespan object representing the specified number of hours.
+   */
+  public static fromHours(hours: number, startDate?: Date): Timespan {
+    const start = startDate ? startDate : new Date();
+    const end = Timespan.dateUnitCalculator.addUnits('hours', hours, start);
+    return new Timespan(start, end);
+  }
+
+  /**
+   * Creates a Timespan object from a specified number of days.
+   * @param days - The number of days for the timespan.
+   * @param startDate - Optional start date for the timespan. If not provided, the current date is used.
+   * @returns A Timespan object representing the specified number of days.
+   */
+  public static fromDays(days: number, startDate?: Date): Timespan {
+    const start = startDate ? startDate : new Date();
+    const end = Timespan.dateUnitCalculator.addUnits('days', days, start);
+    return new Timespan(start, end);
+  }
+
+  /**
+   * Creates a Timespan object from a specified number of weeks.
+   * @param weeks - The number of weeks for the timespan.
+   * @param startDate - Optional start date for the timespan. If not provided, the current date is used.
+   * @returns A Timespan object representing the specified number of weeks.
+   */
+  public static fromWeeks(weeks: number, startDate?: Date): Timespan {
+    const start = startDate ? startDate : new Date();
+    const end = Timespan.dateUnitCalculator.addUnits('weeks', weeks, start);
+    return new Timespan(start, end);
+  }
+
+  /**
+   * Creates a Timespan object from a specified number of months.
+   * @param months - The number of months for the timespan.
+   * @param startDate - Optional start date for the timespan. If not provided, the current date is used.
+   * @returns A Timespan object representing the specified number of months.
+   */
+  public static fromMonths(months: number, startDate?: Date): Timespan {
+    const start = startDate ? startDate : new Date();
+    const end = Timespan.dateUnitCalculator.addUnits('months', months, start);
+    return new Timespan(start, end);
+  }
+
+  /**
+   * Creates a Timespan object from a specified number of years.
+   * @param years - The number of years for the timespan.
+   * @param startDate - Optional start date for the timespan. If not provided, the current date is used.
+   * @returns A Timespan object representing the specified number of years.
+   */
+  public static fromYears(years: number, startDate?: Date): Timespan {
+    const start = startDate ? startDate : new Date();
+    const end = Timespan.dateUnitCalculator.addUnits('years', years, start);
+    return new Timespan(start, end);
   }
 
   /**
@@ -303,7 +368,11 @@ export class Timespan {
    * @returns The duration in seconds.
    */
   public toSeconds(): number {
-    return this.toMilliseconds() / Timespan.millisecondsPerSecond;
+    return Timespan.dateUnitCalculator.between(
+      'seconds',
+      this.startDate,
+      this.endDate,
+    );
   }
 
   /**
@@ -311,7 +380,11 @@ export class Timespan {
    * @returns The duration in minutes.
    */
   public toMinutes(): number {
-    return this.toSeconds() / Timespan.secondsPerMinute;
+    return Timespan.dateUnitCalculator.between(
+      'minutes',
+      this.startDate,
+      this.endDate,
+    );
   }
 
   /**
@@ -319,7 +392,11 @@ export class Timespan {
    * @returns The duration in hours.
    */
   public toHours(): number {
-    return this.toMinutes() / Timespan.minutesPerHour;
+    return Timespan.dateUnitCalculator.between(
+      'hours',
+      this.startDate,
+      this.endDate,
+    );
   }
 
   /**
@@ -327,7 +404,11 @@ export class Timespan {
    * @returns The duration in days.
    */
   public toDays(): number {
-    return this.toHours() / Timespan.hoursPerDay;
+    return Timespan.dateUnitCalculator.between(
+      'days',
+      this.startDate,
+      this.endDate,
+    );
   }
 
   /**
@@ -335,7 +416,11 @@ export class Timespan {
    * @returns The duration in weeks.
    */
   public toWeeks(): number {
-    return this.toDays() / Timespan.daysPerWeek;
+    return Timespan.dateUnitCalculator.between(
+      'weeks',
+      this.startDate,
+      this.endDate,
+    );
   }
 
   /**
@@ -343,7 +428,11 @@ export class Timespan {
    * @returns The duration in months.
    */
   public toMonths(): number {
-    return this.toDays() / Timespan.averageDaysPerMonth;
+    return Timespan.dateUnitCalculator.between(
+      'months',
+      this.startDate,
+      this.endDate,
+    );
   }
 
   /**
@@ -351,7 +440,11 @@ export class Timespan {
    * @returns The duration in years.
    */
   public toYears(): number {
-    return this.toDays() / Timespan.daysPerYear;
+    return Timespan.dateUnitCalculator.between(
+      'years',
+      this.startDate,
+      this.endDate,
+    );
   }
 
   /**
@@ -359,7 +452,6 @@ export class Timespan {
    * @returns The TimeFrame object representing the timespan.
    */
   private calculateTimeFrame(): TimeFrame {
-    const milliseconds = Number(this.timeDiff);
     const timeFrame: TimeFrame = {
       years: 0,
       months: 0,
@@ -370,24 +462,80 @@ export class Timespan {
       seconds: 0,
       milliseconds: 0,
     };
+    const tempDate = new Date(this.startDate);
 
-    let remainingTime = milliseconds;
+    // Calulating the years and months is... complicated.
+    timeFrame.years = Timespan.dateUnitCalculator.between(
+      'years',
+      this.startDate,
+      this.endDate,
+    );
 
-    for (const unit of Object.keys(timeFrame)) {
-      if (Timespan.isKeyOf(unit, conversionTable)) {
-        // Retrieve the conversion factor from the conversion table
-        const conversionFactor = conversionTable[unit].conversionFactor;
-        // calculate the number of units with this conversion factor.
-        const value = Math.floor(remainingTime / conversionFactor);
-        // Set the value in the timeframe.
-        timeFrame[unit] = value;
-        // Calculate the total remainingTime based on the value and conversion factor
-        remainingTime -= value * conversionFactor;
-      }
-      if (remainingTime === 0) {
-        break;
-      }
-    }
+    const totalMonths = Timespan.dateUnitCalculator.between(
+      'months',
+      this.startDate,
+      this.endDate,
+    );
+
+    timeFrame.months = Math.floor(totalMonths - timeFrame.years * 12);
+    tempDate.setFullYear(tempDate.getFullYear() + timeFrame.years);
+    tempDate.setMonth(tempDate.getMonth() + timeFrame.months);
+
+    let remainingTime =
+      this.timeDiff - (tempDate.getTime() - this.startDate.getTime());
+
+    const millisecondsPerWeek =
+      Timespan.dateUnitCalculator.millisecondsPerUnit('weeks');
+    const millisecondsPerDay =
+      Timespan.dateUnitCalculator.millisecondsPerUnit('days');
+    const millisecondsPerHour =
+      Timespan.dateUnitCalculator.millisecondsPerUnit('hours');
+    const millisecondsPerMinute =
+      Timespan.dateUnitCalculator.millisecondsPerUnit('minutes');
+    const millisecondsPerSeconds =
+      Timespan.dateUnitCalculator.millisecondsPerUnit('seconds');
+
+    timeFrame.weeks = Math.floor(remainingTime / millisecondsPerWeek);
+    remainingTime %= millisecondsPerWeek;
+    timeFrame.days = Math.floor(remainingTime / millisecondsPerDay);
+    remainingTime %= millisecondsPerDay;
+    timeFrame.hours = Math.floor(remainingTime / millisecondsPerHour);
+    remainingTime %= millisecondsPerHour;
+    timeFrame.minutes = Math.floor(remainingTime / millisecondsPerMinute);
+    remainingTime %= millisecondsPerMinute;
+    timeFrame.seconds = Math.floor(remainingTime / millisecondsPerSeconds);
+    remainingTime %= millisecondsPerSeconds;
+    timeFrame.milliseconds = remainingTime;
+
+    // const days = Math.floor(remainingTime / millisecondsPerDay);
+    // remainingTime %= millisecondsPerDay;
+
+    // const hours = Math.floor(remainingTime / Timespan.millisecondsPerHour);
+    // remainingTime %= Timespan.millisecondsPerHour;
+
+    // const minutes = Math.floor(remainingTime / Timespan.millisecondsPerMinute);
+    // remainingTime %= Timespan.millisecondsPerMinute;
+
+    // const seconds = Math.floor(remainingTime / Timespan.millisecondsPerSecond);
+    // const milliseconds = remainingTime % Timespan.millisecondsPerSecond;
+
+    // const timeUnits: TimeUnit[] = [
+    //   'weeks',
+    //   'days',
+    //   'hours',
+    //   'minutes',
+    //   'seconds',
+    //   'milliseconds',
+    // ];
+
+    // for (const unit of timeUnits) {
+    //   const millisecondsInUnit =
+    //     Timespan.dateUnitCalculator.millisecondsPerUnit(unit);
+    //   timeFrame[unit] = Math.floor(remainingTime / millisecondsInUnit);
+    //   remainingTime %= millisecondsInUnit;
+    //   console.log({ unit, millisecondsInUnit, remainingTime });
+    // }
+
     return timeFrame;
   }
 
@@ -403,24 +551,13 @@ export class Timespan {
     for (const unit of Object.keys(timeFrame)) {
       const numericValue = Number(timeFrame[unit]);
       // Check if the value is non-zero and append to the timespanParts
-      if (numericValue !== 0 && Timespan.isKeyOf(unit, conversionTable)) {
-        const abbreviation = conversionTable[unit].abbreviation;
+      if (numericValue !== 0) {
+        const abbreviation = Timespan.dateUnitCalculator.abbreviatedUnit(
+          unit as TimeUnit,
+        );
         timespanParts.push(`${numericValue}${abbreviation}`);
       }
     }
     return timespanParts.join(' ');
-  }
-
-  /**
-   * Check if a unit is a key of a given object.
-   * @param unit - The unit to check.
-   * @param obj - The object to check against.
-   * @returns True if the unit is a key of the object, false otherwise.
-   */
-  private static isKeyOf<T extends string>(
-    unit: string,
-    obj: Record<T, unknown>,
-  ): unit is T {
-    return Object.prototype.hasOwnProperty.call(obj, unit);
   }
 }
