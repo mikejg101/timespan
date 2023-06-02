@@ -1,11 +1,10 @@
+import { MinuteUnit } from '../units-of-time';
 import { DateUnitConverter } from './date-unit-converter';
-
-export type MinuteUnit = 'm' | 'min' | 'mins' | 'minute' | 'minutes';
 
 /**
  * Represents a converter for the minute unit.
  */
-export class MinuteConverter implements DateUnitConverter {
+export class MinuteConverter extends DateUnitConverter {
   /**
    * The default name of the minute unit.
    */
@@ -24,7 +23,8 @@ export class MinuteConverter implements DateUnitConverter {
   /**
    * The number of milliseconds per minute (60 * 1000).
    */
-  public readonly millisecondsPerUnit = 60 * 1000;
+  public readonly millisecondsPerUnit =
+    DateUnitConverter.secondsInAMinute * DateUnitConverter.millsecondsInASecond;
 
   /**
    * An array of aliases for the minute unit.
@@ -45,13 +45,6 @@ export class MinuteConverter implements DateUnitConverter {
    * @throws Error if the input dates are invalid or if the start date is greater than the end date.
    */
   public between(startDate: Date, endDate: Date): number {
-    if (!(startDate instanceof Date) || !(endDate instanceof Date)) {
-      throw new Error('Invalid date input.');
-    }
-    if (startDate.getTime() > endDate.getTime()) {
-      throw new Error('Start date cannot be greater than end date.');
-    }
-
     return Math.floor(
       (endDate.getTime() - startDate.getTime()) / this.millisecondsPerUnit,
     );
@@ -65,12 +58,6 @@ export class MinuteConverter implements DateUnitConverter {
    * @throws Error if the input date is invalid or if the number of minutes is negative.
    */
   public add(minutes: number, startDate: Date): Date {
-    if (!(startDate instanceof Date)) {
-      throw new Error('Invalid date input.');
-    }
-    if (minutes < 0) {
-      throw new Error('Invalid minute input.');
-    }
     return new Date(startDate.getTime() + minutes * this.millisecondsPerUnit);
   }
 }

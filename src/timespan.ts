@@ -1,12 +1,13 @@
 import { TimeFrame } from './timeframe';
-import { TimeUnit } from './time-unit';
+import { TimeUnit } from './units-of-time';
 import { DateUnitCalculator } from './date-unit-calculator';
+import { DateUnitConverter } from './converters/date-unit-converter';
 
 /**
  * Represents a time span between two dates.
  */
 export class Timespan {
-  private static dateUnitCalculator = new DateUnitCalculator();
+  private static readonly dateUnitCalculator = new DateUnitCalculator();
   /**
    * The start of the time span.
    */
@@ -479,7 +480,9 @@ export class Timespan {
       this.endDate,
     );
 
-    timeFrame.months = Math.floor(totalMonths - timeFrame.years * 12);
+    timeFrame.months = Math.floor(
+      totalMonths - timeFrame.years * DateUnitConverter.monthsInAYear,
+    );
     tempDate.setFullYear(tempDate.getFullYear() + timeFrame.years);
     tempDate.setMonth(tempDate.getMonth() + timeFrame.months);
 

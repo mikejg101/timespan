@@ -3,6 +3,7 @@ import {
   CleanCommand,
   DependenciesCheckCommand,
   LicensesCheckCommand,
+  NoConsoleCommand,
   UpdatePackageJsonCommand,
 } from './commands';
 import { CommandInvoker } from './core/command-invoker';
@@ -16,3 +17,4 @@ invoker.register(new CleanCommand());
 invoker.register(new DependenciesCheckCommand());
 invoker.register(new LicensesCheckCommand());
 invoker.register(new UpdatePackageJsonCommand());
+invoker.register(new NoConsoleCommand());

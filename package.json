@@ -30,6 +30,7 @@
     "clean": "ts-node tools/undertools clean",
     "changelog": "ts-node tools/undertools changelog",
     "package": "npm run build && npm pack",
+    "no-console": "ts-node tools/undertools no-console",
     "test": "jest --no-cache --runInBand",
     "test:cov": "jest --coverage --no-cache --runInBand",
     "addscope": "ts-node tools/undertools update name @undercroft/timespan",

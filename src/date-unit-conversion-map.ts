@@ -7,22 +7,22 @@ import { MonthConverter } from './converters/month-converter';
 import { SecondConverter } from './converters/second-converter';
 import { WeekConverter } from './converters/week-converter';
 import { YearConverter } from './converters/year-converter';
-import { TimeUnit } from './time-unit';
+import { TimeUnit } from './units-of-time';
 
 /**
  * A table of date unit converters for different time units.
  */
 export class DateUnitConversionTable {
-  private yearConverter = new YearConverter();
-  private monthConverter = new MonthConverter();
-  private weekConverter = new WeekConverter();
-  private dayConverter = new DayConverter();
-  private hourConverter = new HourConverter();
-  private minuteConverter = new MinuteConverter();
-  private secondConverter = new SecondConverter();
-  private millisecondConverter = new MillisecondConverter();
+  private readonly yearConverter = new YearConverter();
+  private readonly monthConverter = new MonthConverter();
+  private readonly weekConverter = new WeekConverter();
+  private readonly dayConverter = new DayConverter();
+  private readonly hourConverter = new HourConverter();
+  private readonly minuteConverter = new MinuteConverter();
+  private readonly secondConverter = new SecondConverter();
+  private readonly millisecondConverter = new MillisecondConverter();
 
-  private conversionTable: {
+  private readonly conversionTable: {
     [unit in TimeUnit]: DateUnitConverter;
   } = {
     ms: this.millisecondConverter,

@@ -1,11 +1,10 @@
+import { WeekUnit } from '../units-of-time';
 import { DateUnitConverter } from './date-unit-converter';
-
-export type WeekUnit = 'w' | 'wk' | 'wks' | 'week' | 'weeks';
 
 /**
  * Represents a converter for the week unit.
  */
-export class WeekConverter implements DateUnitConverter {
+export class WeekConverter extends DateUnitConverter {
   /**
    * The default name of the week unit.
    */
@@ -24,7 +23,12 @@ export class WeekConverter implements DateUnitConverter {
   /**
    * The number of milliseconds per week.
    */
-  public readonly millisecondsPerUnit = 7 * 24 * 60 * 60 * 1000;
+  public readonly millisecondsPerUnit =
+    DateUnitConverter.daysInAWeek *
+    DateUnitConverter.hoursInADay *
+    DateUnitConverter.minutesInAnHour *
+    DateUnitConverter.secondsInAMinute *
+    DateUnitConverter.millsecondsInASecond;
 
   /**
    * An array of aliases for the week unit.
@@ -45,12 +49,6 @@ export class WeekConverter implements DateUnitConverter {
    * @throws Error if the input dates are invalid or if the start date is greater than the end date.
    */
   public between(startDate: Date, endDate: Date): number {
-    if (!(startDate instanceof Date && endDate instanceof Date)) {
-      throw new Error('Invalid date inputs.');
-    }
-    if (startDate.getTime() > endDate.getTime()) {
-      throw new Error('Start date cannot be greater than end date.');
-    }
     return Math.floor(
       (endDate.getTime() - startDate.getTime()) / this.millisecondsPerUnit,
     );
@@ -64,12 +62,6 @@ export class WeekConverter implements DateUnitConverter {
    * @throws Error if the input date is invalid or if the number of weeks is negative.
    */
   public add(weeks: number, startDate: Date): Date {
-    if (!(startDate instanceof Date)) {
-      throw new Error('Invalid date input.');
-    }
-    if (weeks < 0) {
-      throw new Error('Invalid week input.');
-    }
     const weeksInMilliseconds = weeks * this.millisecondsPerUnit;
     const addedMilliseconds = startDate.getTime() + weeksInMilliseconds;
     return new Date(addedMilliseconds);

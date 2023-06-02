@@ -1,16 +1,10 @@
+import { MillisecondUnit } from '../units-of-time';
 import { DateUnitConverter } from './date-unit-converter';
-
-export type MillisecondUnit =
-  | 'milliseconds'
-  | 'millisecond'
-  | 'msec'
-  | 'mss'
-  | 'ms';
 
 /**
  * Represents a converter for the millisecond unit.
  */
-export class MillisecondConverter implements DateUnitConverter {
+export class MillisecondConverter extends DateUnitConverter {
   /**
    * The default name of the millisecond unit.
    */
@@ -50,12 +44,6 @@ export class MillisecondConverter implements DateUnitConverter {
    * @throws Error if the input dates are invalid or if the start date is greater than the end date.
    */
   public between(startDate: Date, endDate: Date): number {
-    if (!(startDate instanceof Date) || !(endDate instanceof Date)) {
-      throw new Error('Invalid date input.');
-    }
-    if (startDate.getTime() > endDate.getTime()) {
-      throw new Error('Start date cannot be greater than end date.');
-    }
     return endDate.getTime() - startDate.getTime();
   }
 
@@ -67,12 +55,6 @@ export class MillisecondConverter implements DateUnitConverter {
    * @throws Error if the input date is invalid or if the number of milliseconds is negative.
    */
   public add(milliseconds: number, startDate: Date): Date {
-    if (!(startDate instanceof Date)) {
-      throw new Error('Invalid date input.');
-    }
-    if (milliseconds < 0) {
-      throw new Error('Invalid millisecond input.');
-    }
     return new Date(startDate.getTime() + milliseconds);
   }
 }

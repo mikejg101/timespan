@@ -13,9 +13,11 @@ const colors: { [key: string]: string } = {
  */
 export function buildHeader(title: string, hasError: boolean): string {
   const color = getHeaderColor(hasError ? 'error' : 'success');
-  const paddedTitle = title.padEnd(66, ' ');
-  const paddedBorder = `${color}`.padEnd(74, '*') + '\x1B[39m';
-  return `${color}${paddedBorder}\x1B[39m\n${color}* ${paddedTitle}*\x1B[39m\n${color}${paddedBorder}\x1B[39m`;
+  const paddedTitle = title.padEnd(0, ' ');
+  const headerTitle = `${color}* ${paddedTitle} *`;
+  const paddedBorder = `${color}`.padEnd(headerTitle.length, '*') + '\x1B[39m';
+  const headerBorder = `${color}${paddedBorder}\x1B[39m\n`;
+  return `${headerBorder}${headerTitle}\x1B[39m\n${headerBorder}`;
 }
 
 /**

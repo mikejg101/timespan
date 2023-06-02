@@ -1,11 +1,10 @@
+import { MonthUnit } from '../units-of-time';
 import { DateUnitConverter } from './date-unit-converter';
-
-export type MonthUnit = 'M' | 'mo' | 'mos' | 'month' | 'months';
 
 /**
  * Represents a converter for the month unit.
  */
-export class MonthConverter implements DateUnitConverter {
+export class MonthConverter extends DateUnitConverter {
   /**
    * The default name of the month unit.
    */
@@ -45,14 +44,6 @@ export class MonthConverter implements DateUnitConverter {
    * @throws Error if the input dates are invalid or if the start date is greater than the end date.
    */
   public between(startDate: Date, endDate: Date): number {
-    if (!(startDate instanceof Date && endDate instanceof Date)) {
-      throw new Error('Invalid date inputs.');
-    }
-
-    if (startDate.getTime() > endDate.getTime()) {
-      throw new Error('Start date cannot be greater than end date.');
-    }
-
     const startYear = startDate.getFullYear();
     const startMonth = startDate.getMonth();
     const startDay = startDate.getDate();
@@ -60,7 +51,9 @@ export class MonthConverter implements DateUnitConverter {
     const endMonth = endDate.getMonth();
     const endDay = endDate.getDate();
 
-    let months = (endYear - startYear) * 12 + (endMonth - startMonth);
+    let months =
+      (endYear - startYear) * DateUnitConverter.monthsInAYear +
+      (endMonth - startMonth);
     if (endDay < startDay) {
       months--;
     }
@@ -75,25 +68,21 @@ export class MonthConverter implements DateUnitConverter {
    * @throws Error if the input date is invalid or if the number of months is negative.
    */
   public add(months: number, startDate: Date): Date {
-    if (!(startDate instanceof Date)) {
-      throw new Error('Invalid date input.');
-    }
-    if (months < 0) {
-      throw new Error('Invalid month input.');
-    }
     const newDate = new Date(startDate);
     const originalHours = newDate.getUTCHours();
     const originalMinutes = newDate.getUTCMinutes();
     const originalSeconds = newDate.getUTCSeconds();
     const originalMilliseconds = newDate.getUTCMilliseconds();
-    newDate.setUTCHours(0, 0, 0, 0); // Set UTC time components to zero
+    // Set UTC time components to zero
+    newDate.setUTCHours(0, 0, 0, 0);
     newDate.setUTCMonth(newDate.getUTCMonth() + months);
+    // Restore original UTC time components
     newDate.setUTCHours(
       originalHours,
       originalMinutes,
       originalSeconds,
       originalMilliseconds,
-    ); // Restore original UTC time components
+    );
     return newDate;
   }
 }

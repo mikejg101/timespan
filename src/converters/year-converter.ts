@@ -1,11 +1,13 @@
+import { YearUnit } from '../units-of-time';
 import { DateUnitConverter } from './date-unit-converter';
-
-export type YearUnit = 'y' | 'yr' | 'yrs' | 'year' | 'years';
 
 /**
  * Represents a converter for the year unit.
  */
-export class YearConverter implements DateUnitConverter {
+export class YearConverter extends DateUnitConverter {
+  private static readonly february28 = 28;
+  private static readonly february29 = 29;
+  private static readonly february = 1;
   /**
    * The default name of the year unit.
    */
@@ -24,12 +26,23 @@ export class YearConverter implements DateUnitConverter {
   /**
    * The number of milliseconds per year.
    */
-  public readonly millisecondsPerUnit = 1000 * 60 * 60 * 24 * 365;
+  public readonly millisecondsPerUnit =
+    DateUnitConverter.millsecondsInASecond *
+    DateUnitConverter.secondsInAMinute *
+    DateUnitConverter.minutesInAnHour *
+    DateUnitConverter.hoursInADay *
+    DateUnitConverter.daysInAYear;
 
   /**
    * An array of aliases for the year unit.
    */
-  public readonly aliases: Array<YearUnit> = ['yrs', 'yr', 'y'];
+  public readonly aliases: Array<YearUnit> = [
+    'years',
+    'year',
+    'yrs',
+    'yr',
+    'y',
+  ];
 
   /**
    * Calculates the number of years between two dates.
@@ -39,17 +52,6 @@ export class YearConverter implements DateUnitConverter {
    * @throws Error if the input dates are invalid or if the start date is greater than the end date.
    */
   public between(startDate: Date, endDate: Date): number {
-    if (
-      !(startDate instanceof Date) ||
-      !(endDate instanceof Date) ||
-      isNaN(startDate.getTime()) ||
-      isNaN(endDate.getTime())
-    ) {
-      throw new Error('Invalid date inputs.');
-    }
-    if (startDate.getTime() > endDate.getTime()) {
-      throw new Error('Start date cannot be greater than end date.');
-    }
     const startYear = startDate.getFullYear();
     const endYear = endDate.getFullYear();
 
@@ -64,18 +66,13 @@ export class YearConverter implements DateUnitConverter {
    * @throws Error if the input date is invalid or if the number of years is negative.
    */
   public add(years: number, startDate: Date): Date {
-    if (!(startDate instanceof Date)) {
-      throw new Error('Invalid date input.');
-    }
-    if (years < 0) {
-      throw new Error('Invalid year input.');
-    }
     const startYear = startDate.getFullYear();
     const targetYear = startYear + years;
 
     // Check if the starting date is on February 29th
     const isStartDateOnLeapYearDay =
-      startDate.getMonth() === 1 && startDate.getDate() === 29;
+      startDate.getMonth() === YearConverter.february &&
+      startDate.getDate() === YearConverter.february29;
 
     const dateWithYearsAdded = new Date(startDate.getTime());
     dateWithYearsAdded.setFullYear(targetYear);
@@ -83,19 +80,10 @@ export class YearConverter implements DateUnitConverter {
     // If the starting date is on February 29th and the target year is not a leap year,
     // set the date to February 28th
     if (isStartDateOnLeapYearDay && !this.isLeapYear(targetYear)) {
-      dateWithYearsAdded.setMonth(1);
-      dateWithYearsAdded.setDate(28);
+      dateWithYearsAdded.setMonth(YearConverter.february);
+      dateWithYearsAdded.setDate(YearConverter.february28);
     }
 
     return dateWithYearsAdded;
-  }
-
-  /**
-   * Checks if a given year is a leap year.
-   * @param year - The year to check.
-   * @returns True if the year is a leap year, false otherwise.
-   */
-  private isLeapYear(year: number): boolean {
-    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
   }
 }

@@ -21,22 +21,6 @@ describe('MonthConverter', () => {
       const result = monthConverter.between(startDate, endDate);
       expect(result).toBe(2);
     });
-
-    it('should throw an error for invalid date input', () => {
-      const startDate = new Date('2023-05-01');
-      const endDate = '2023-07-01' as any;
-      expect(() => monthConverter.between(startDate, endDate)).toThrow(
-        'Invalid date inputs.',
-      );
-    });
-
-    it('should throw an error if the start date is greater than the end date', () => {
-      const startDate = new Date('2023-07-01');
-      const endDate = new Date('2023-05-01');
-      expect(() => monthConverter.between(startDate, endDate)).toThrow(
-        'Start date cannot be greater than end date.',
-      );
-    });
   });
 
   describe('add', () => {
@@ -52,20 +36,6 @@ describe('MonthConverter', () => {
       const result = monthConverter.add(4, startDate);
       const expectedDate = new Date('2024-03-01T00:00:00.000Z');
       expect(result).toEqual(expectedDate);
-    });
-
-    it('should throw an error for invalid date input', () => {
-      const startDate = '2023-05-01' as any;
-      expect(() => monthConverter.add(3, startDate)).toThrow(
-        'Invalid date input.',
-      );
-    });
-
-    it('should throw an error for negative month input', () => {
-      const startDate = new Date('2023-05-01');
-      expect(() => monthConverter.add(-3, startDate)).toThrow(
-        'Invalid month input.',
-      );
     });
   });
 });

@@ -1,11 +1,10 @@
+import { SecondUnit } from '../units-of-time';
 import { DateUnitConverter } from './date-unit-converter';
-
-export type SecondUnit = 'seconds' | 'second' | 'secs' | 'sec' | 's';
 
 /**
  * Represents a converter for the second unit.
  */
-export class SecondConverter implements DateUnitConverter {
+export class SecondConverter extends DateUnitConverter {
   /**
    * The default name of the second unit.
    */
@@ -45,12 +44,6 @@ export class SecondConverter implements DateUnitConverter {
    * @throws Error if the input dates are invalid or if the start date is greater than the end date.
    */
   public between(startDate: Date, endDate: Date): number {
-    if (!(startDate instanceof Date && endDate instanceof Date)) {
-      throw new Error('Invalid date inputs.');
-    }
-    if (startDate.getTime() > endDate.getTime()) {
-      throw new Error('Start date cannot be greater than end date.');
-    }
     return Math.floor(
       (endDate.getTime() - startDate.getTime()) / this.millisecondsPerUnit,
     );
@@ -64,12 +57,6 @@ export class SecondConverter implements DateUnitConverter {
    * @throws Error if the input date is invalid or if the number of seconds is negative.
    */
   public add(seconds: number, startDate: Date): Date {
-    if (!(startDate instanceof Date)) {
-      throw new Error('Invalid date input.');
-    }
-    if (seconds < 0) {
-      throw new Error('Invalid second input.');
-    }
     return new Date(startDate.getTime() + seconds * this.millisecondsPerUnit);
   }
 }
