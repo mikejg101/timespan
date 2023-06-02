@@ -42,8 +42,8 @@ export class DayConverter extends DateUnitConverter {
    * @throws Error if the input dates are invalid or if the start date is greater than the end date.
    */
   public between(startDate: Date, endDate: Date): number {
-    const startYear = startDate.getFullYear();
-    const endYear = endDate.getFullYear();
+    const startYear = startDate.getUTCFullYear();
+    const endYear = endDate.getUTCFullYear();
     const startDayOfYear = this.getDayOfYear(startDate);
     const endDayOfYear = this.getDayOfYear(endDate);
 
@@ -80,7 +80,7 @@ export class DayConverter extends DateUnitConverter {
    * @returns The day of the year (1-based index).
    */
   private getDayOfYear(date: Date): number {
-    const startOfYear = new Date(date.getFullYear(), 0, 1);
+    const startOfYear = new Date(date.getUTCFullYear(), 0, 1);
     const diff = date.getTime() - startOfYear.getTime();
     return Math.floor(diff / this.millisecondsPerUnit) + 1;
   }

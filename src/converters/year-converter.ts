@@ -52,9 +52,8 @@ export class YearConverter extends DateUnitConverter {
    * @throws Error if the input dates are invalid or if the start date is greater than the end date.
    */
   public between(startDate: Date, endDate: Date): number {
-    const startYear = startDate.getFullYear();
-    const endYear = endDate.getFullYear();
-
+    const startYear = startDate.getUTCFullYear();
+    const endYear = endDate.getUTCFullYear();
     return endYear - startYear;
   }
 
@@ -66,22 +65,22 @@ export class YearConverter extends DateUnitConverter {
    * @throws Error if the input date is invalid or if the number of years is negative.
    */
   public add(years: number, startDate: Date): Date {
-    const startYear = startDate.getFullYear();
+    const startYear = startDate.getUTCFullYear();
     const targetYear = startYear + years;
 
     // Check if the starting date is on February 29th
     const isStartDateOnLeapYearDay =
-      startDate.getMonth() === YearConverter.february &&
-      startDate.getDate() === YearConverter.february29;
+      startDate.getUTCMonth() === YearConverter.february &&
+      startDate.getUTCDate() === YearConverter.february29;
 
     const dateWithYearsAdded = new Date(startDate.getTime());
-    dateWithYearsAdded.setFullYear(targetYear);
+    dateWithYearsAdded.setUTCFullYear(targetYear);
 
     // If the starting date is on February 29th and the target year is not a leap year,
     // set the date to February 28th
     if (isStartDateOnLeapYearDay && !this.isLeapYear(targetYear)) {
-      dateWithYearsAdded.setMonth(YearConverter.february);
-      dateWithYearsAdded.setDate(YearConverter.february28);
+      dateWithYearsAdded.setUTCMonth(YearConverter.february);
+      dateWithYearsAdded.setUTCDate(YearConverter.february28);
     }
 
     return dateWithYearsAdded;

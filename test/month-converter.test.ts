@@ -21,6 +21,13 @@ describe('MonthConverter', () => {
       const result = monthConverter.between(startDate, endDate);
       expect(result).toBe(2);
     });
+
+    it('adjusts months if endDay is less than startDay', () => {
+      const startDate = new Date('2022-01-15T00:00:00.000Z');
+      const endDate = new Date('2022-02-01T00:00:00.000Z');
+      const months = monthConverter.between(startDate, endDate);
+      expect(months).toBe(0);
+    });
   });
 
   describe('add', () => {

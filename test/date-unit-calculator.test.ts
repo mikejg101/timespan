@@ -73,8 +73,8 @@ describe('DateUnitCalculator', () => {
 
       // Calculate the expected number of units (months) between the dates
       const expectedMonths =
-        (endDate.getFullYear() - startDate.getFullYear()) * 12 +
-        (endDate.getMonth() - startDate.getMonth());
+        (endDate.getUTCFullYear() - startDate.getUTCFullYear()) * 12 +
+        (endDate.getUTCMonth() - startDate.getUTCMonth());
 
       // Check if the result matches the expected number of units
       expect(result).toBe(expectedMonths);

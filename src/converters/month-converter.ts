@@ -44,12 +44,12 @@ export class MonthConverter extends DateUnitConverter {
    * @throws Error if the input dates are invalid or if the start date is greater than the end date.
    */
   public between(startDate: Date, endDate: Date): number {
-    const startYear = startDate.getFullYear();
-    const startMonth = startDate.getMonth();
-    const startDay = startDate.getDate();
-    const endYear = endDate.getFullYear();
-    const endMonth = endDate.getMonth();
-    const endDay = endDate.getDate();
+    const startYear = startDate.getUTCFullYear();
+    const startMonth = startDate.getUTCMonth();
+    const startDay = startDate.getUTCDate();
+    const endYear = endDate.getUTCFullYear();
+    const endMonth = endDate.getUTCMonth();
+    const endDay = endDate.getUTCDate();
 
     let months =
       (endYear - startYear) * DateUnitConverter.monthsInAYear +

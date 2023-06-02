@@ -196,14 +196,18 @@ export class Timespan {
     // Set the end date to however many milliseconds we have calculated.
     const endDate = new Date(startDate);
 
-    endDate.setFullYear(endDate.getFullYear() + timeframe.years);
-    endDate.setMonth(endDate.getMonth() + timeframe.months);
-    endDate.setDate(endDate.getDate() + timeframe.weeks * Timespan.daysPerWeek);
-    endDate.setDate(endDate.getDate() + timeframe.days);
-    endDate.setHours(endDate.getHours() + timeframe.hours);
-    endDate.setMinutes(endDate.getMinutes() + timeframe.minutes);
-    endDate.setSeconds(endDate.getSeconds() + timeframe.seconds);
-    endDate.setMilliseconds(endDate.getMilliseconds() + timeframe.milliseconds);
+    endDate.setUTCFullYear(endDate.getUTCFullYear() + timeframe.years);
+    endDate.setUTCMonth(endDate.getUTCMonth() + timeframe.months);
+    endDate.setUTCDate(
+      endDate.getUTCDate() + timeframe.weeks * Timespan.daysPerWeek,
+    );
+    endDate.setUTCDate(endDate.getUTCDate() + timeframe.days);
+    endDate.setUTCHours(endDate.getUTCHours() + timeframe.hours);
+    endDate.setUTCMinutes(endDate.getUTCMinutes() + timeframe.minutes);
+    endDate.setUTCSeconds(endDate.getUTCSeconds() + timeframe.seconds);
+    endDate.setUTCMilliseconds(
+      endDate.getUTCMilliseconds() + timeframe.milliseconds,
+    );
 
     // Return the new timespan to the consumer. Since the timespan does all of
     // timeframe and string calculations on initialization, our job here is done.
@@ -483,8 +487,8 @@ export class Timespan {
     timeFrame.months = Math.floor(
       totalMonths - timeFrame.years * DateUnitConverter.monthsInAYear,
     );
-    tempDate.setFullYear(tempDate.getFullYear() + timeFrame.years);
-    tempDate.setMonth(tempDate.getMonth() + timeFrame.months);
+    tempDate.setUTCFullYear(tempDate.getUTCFullYear() + timeFrame.years);
+    tempDate.setUTCMonth(tempDate.getUTCMonth() + timeFrame.months);
 
     let remainingTime =
       this.timeDiff - (tempDate.getTime() - this.startDate.getTime());

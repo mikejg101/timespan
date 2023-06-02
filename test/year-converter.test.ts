@@ -31,7 +31,7 @@ describe('YearConverter', () => {
 
     it('should increment totalYears when range covers a leap year', () => {
       const startDate = new Date('2020-01-01');
-      const endDate = new Date('2020-12-31');
+      const endDate = new Date('2021-12-31');
       const result = yearConverter.between(startDate, endDate);
       expect(result).toEqual(1);
     });
@@ -59,9 +59,9 @@ describe('YearConverter', () => {
       const result = yearConverter.add(1, startDate);
 
       // Check if the result is February 28th of the target year
-      expect(result.getFullYear()).toBe(targetYear);
-      expect(result.getMonth()).toBe(1); // February is month 1 (zero-based index)
-      expect(result.getDate()).toBe(28);
+      expect(result.getUTCFullYear()).toBe(targetYear);
+      expect(result.getUTCMonth()).toBe(1); // February is month 1 (zero-based index)
+      expect(result.getUTCDate()).toBe(28);
     });
   });
 });

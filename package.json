@@ -36,7 +36,8 @@
     "addscope": "ts-node tools/undertools update name @undercroft/timespan",
     "badge:cov": "npx lcov-badge-generator -o ./badges/coverage.svg ./coverage/lcov.info",
     "docs": "typedoc",
-    "check": "./.husky/pre-commit"
+    "check": "./.husky/pre-commit",
+    "sandbox": "ts-node ./sandbox.ts"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",

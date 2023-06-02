@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## 1.0.4 Unreleased
+- refactor: improved structure and tests
 - chore: updated readme
 - chore: updated changelog and tests
 - chore: added community standard documents
