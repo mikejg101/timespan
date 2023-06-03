@@ -199,7 +199,7 @@ describe('Timespan', () => {
       expect(timespan.toYears()).toBe(1);
       expect(timespan.toMonths()).toBe(14);
       expect(timespan.toWeeks()).toBe(64);
-      expect(timespan.toDays()).toBe(453);
+      expect(timespan.toDays()).toBe(452);
       expect(timespan.toHours()).toBe(10853);
       expect(timespan.toMinutes()).toBe(651186);
       expect(timespan.toSeconds()).toBe(39071167);
@@ -231,7 +231,7 @@ describe('Timespan', () => {
       expect(timespan.toYears()).toBe(1);
       expect(timespan.toMonths()).toBe(14);
       expect(timespan.toWeeks()).toBe(64);
-      expect(timespan.toDays()).toBe(453);
+      expect(timespan.toDays()).toBe(452);
       expect(timespan.toHours()).toBe(10853);
       expect(timespan.toMinutes()).toBe(651186);
       expect(timespan.toSeconds()).toBe(39071167);
