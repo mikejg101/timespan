@@ -10,5 +10,3 @@ npm run no-console
 npm run test:cov
 npm run badge:cov
 git add badges/\*
-npm run changelog
-git add changelog.md
