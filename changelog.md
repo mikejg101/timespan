@@ -1,7 +1,8 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## 1.0.4 Unreleased
+## 1.0.4
+- fix: fixed issue caclulating days
 - fix: fixed issue with timezones
 - refactor: improved structure and tests
 - chore: updated readme
