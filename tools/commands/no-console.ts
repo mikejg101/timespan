@@ -10,8 +10,10 @@ export class NoConsoleCommand implements Command {
 
   public async handler(): Promise<number> {
     try {
-      // eslint-disable-next-line no-underscore/no-underscore
-      this.checkFilesForConsoleLog(path.join(__dirname, '..', '..', '/src'));
+      NoConsoleCommand.checkFilesForConsoleLog(
+        // eslint-disable-next-line no-underscore/no-underscore
+        path.join(__dirname, '..', '..', '/src'),
+      );
       const header = buildHeader(
         `No console statements found in any files.`,
         false,
@@ -28,28 +30,28 @@ export class NoConsoleCommand implements Command {
     }
   }
 
-  private checkFilesForConsoleLog(folderPath: string): void {
+  private static checkFilesForConsoleLog(folderPath: string): void {
     if (fs.existsSync(folderPath)) {
       const files = fs.readdirSync(folderPath);
       for (const file of files) {
-        this.checkPath(`${folderPath}/${file}`);
+        NoConsoleCommand.checkPath(`${folderPath}/${file}`);
       }
     }
   }
 
-  private checkFile(filePath: string) {
+  private static checkFile(filePath: string) {
     const fileContent = fs.readFileSync(filePath, 'utf8');
     if (fileContent.includes('console')) {
       throw new Error(`Console found in file: ${filePath}`);
     }
   }
 
-  private checkPath(path: string) {
+  private static checkPath(path: string) {
     const stats = fs.statSync(path);
     if (stats.isDirectory()) {
       this.checkFilesForConsoleLog(path);
     } else if (stats.isFile() && path.endsWith('.ts')) {
-      this.checkFile(path);
+      NoConsoleCommand.checkFile(path);
     }
   }
 }
