@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## 1.0.4
-- fix: fixed issue caclulating days
+- fix: fixed issue calculating days
 - fix: fixed issue with timezones
 - refactor: improved structure and tests
 - chore: updated readme
@@ -26,7 +26,7 @@ All notable changes to this project will be documented in this file.
 
 ## v1.0.1
 - docs: added badges
-- docs: updated readme and set project to public on npm
+- docs: updated the readme and set project to public on npm
 
 ## v1.0.0
 - feat: added a commit linter
