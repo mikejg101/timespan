@@ -39,7 +39,7 @@ export class DependenciesCheckCommand implements Command {
     if (!packageJson) {
       throw new Error('Cannot open package.json');
     }
-    const currenWorkingDirectory = process.cwd();
+    const currentWorkingDirectory = process.cwd();
 
     // Run depcheck
     const unused = await depcheck(currenWorkingDirectory, this.options);
