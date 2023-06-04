@@ -53,17 +53,24 @@ In this example, we create a `Timespan` object by providing the start and end da
 
 The Timespan class provides various methods to retrieve information about a timespan.
 
-```javascript
+```js
 import { Timespan } from '@undercroft/timespan';
 
 const start = new Date('2023-01-01');
 const end = new Date('2023-01-15');
 const timespan = new Timespan(start, end);
 
-console.log(timespan.start); // Output: 2023-01-01T00:00:00.000Z
-console.log(timespan.end); // Output: 2023-01-15T00:00:00.000Z
-console.log(timespan.toTimeframe()); // Output: { years: 0, months: 0, weeks: 2, days: 0, hours: 0, minutes: 0, seconds: 0, milliseconds: 0 }
-console.log(timespan.toMilliseconds()); // Output: 1209600000
+// Output: 2023-01-01T00:00:00.000Z
+console.log(timespan.start);
+
+// Output: 2023-01-15T00:00:00.000Z
+console.log(timespan.end);
+
+// Output: { years: 0, months: 0, weeks: 2, days: 0, hours: 0, minutes: 0, seconds: 0, milliseconds: 0 }
+console.log(timespan.toTimeframe());
+
+// Output: 1209600000
+console.log(timespan.toMilliseconds());
 ```
 
 In the example above, we retrieve the start and end dates of the timespan using the start and end properties. We also obtain the timespan represented as a TimeFrame object using `toTimeframe()`, which provides the individual components of the timespan such as years, months, weeks, days, hours, minutes, seconds, and milliseconds. Lastly, we calculate the total duration in milliseconds using `toMilliseconds()`.
@@ -72,7 +79,7 @@ In the example above, we retrieve the start and end dates of the timespan using 
 
 The Timespan class provides convenient methods to convert a timespan to different units of time.
 
-```javascript
+```js
 import { Timespan } from '@undercroft/timespan';
 
 const start = new Date('2023-01-01');
@@ -94,63 +101,63 @@ You can create a Timespan object using the static methods provided by the class.
 Timespan.fromMilliseconds(milliseconds: number, startDate?: Date): Timespan
 Creates a Timespan object from a specified number of milliseconds.
 
-```javascript
+```js
 import { Timespan } from '@undercroft/timespan';
 
 const timespan = Timespan.fromMilliseconds(5000);
-Timespan.fromSeconds(seconds: number, startDate?: Date): Timespan
+Timespan.fromSeconds(seconds, startDate);
 ```
 Creates a Timespan object from a specified number of seconds.
 
-```javascript
+```js
 import { Timespan } from '@undercroft/timespan';
 
 const timespan = Timespan.fromSeconds(120);
-Timespan.fromMinutes(minutes: number, startDate?: Date): Timespan
+Timespan.fromMinutes(minutes, startDate);
 ```
 Creates a Timespan object from a specified number of minutes.
 
-```javascript
+```js
 import { Timespan } from '@undercroft/timespan';
 
 const timespan = Timespan.fromMinutes(60);
-Timespan.fromHours(hours: number, startDate?: Date): Timespan
+Timespan.fromHours(hours, startDate);
 ```
 Creates a Timespan object from a specified number of hours.
 
-```javascript
+```js
 import { Timespan } from '@undercroft/timespan';
 
 const timespan = Timespan.fromHours(24);
-Timespan.fromDays(days: number, startDate?: Date): Timespan
+Timespan.fromDays(days, startDate);
 ```
 Creates a Timespan object from a specified number of days.
 
-```javascript
+```js
 import { Timespan } from '@undercroft/timespan';
 
 const timespan = Timespan.fromDays(7);
-Timespan.fromWeeks(weeks: number, startDate?: Date): Timespan
-Creates a Timespan object from a specified number of weeks.
+Timespan.fromWeeks(weeks, startDate);
 ```
+Creates a Timespan object from a specified number of weeks.
 
-```javascript
+```js
 import { Timespan } from '@undercroft/timespan';
 
 const timespan = Timespan.fromWeeks(4);
-Timespan.fromMonths(months: number, startDate?: Date): Timespan
+Timespan.fromMonths(months, startDate);
 ```
 Creates a Timespan object from a specified number of months.
 
-```javascript
+```js
 import { Timespan } from '@undercroft/timespan';
 
 const timespan = Timespan.fromMonths(6);
-Timespan.fromYears(years: number, startDate?: Date): Timespan
+Timespan.fromYears(years, startDate);
 ```
 Creates a Timespan object from a specified number of years.
 
-```javascript
+```js
 import { Timespan } from '@undercroft/timespan';
 
 const timespan = Timespan.fromYears(2);
@@ -158,7 +165,7 @@ const timespan = Timespan.fromYears(2);
 Performing Calculations and Comparisons
 Once you have a Timespan object, you can perform various calculations and comparisons using the provided methods. Here are some examples:
 
-```javascript
+```js
 import { Timespan } from '@undercroft/timespan';
 
 const timespan1 = Timespan.fromHours(12);
@@ -169,7 +176,7 @@ const subtractedTimespan = timespan2.subtract(timespan1);
 const areEqual = timespan1.equals(timespan2);
 const comparisonResult = timespan1.compareTo(timespan2);
 ```
-Please refer to the API documentation or the source code for more details on the available methods and their usage.
+Please refer to the API documentation, or the source code for more details on the available methods and their usage.
 
 ## Contributing
 Contributions to the Timespan class are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request on the GitHub repository.
