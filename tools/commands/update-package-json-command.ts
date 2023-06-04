@@ -61,7 +61,10 @@ export class UpdatePackageJsonCommand implements Command {
     const file = JSON.parse(fileContents);
 
     // Validate and sanitize the key and value
-    if (this.isValidKey(file, name) && this.isValidValue(file, name, value)) {
+    if (
+      UpdatePackageJsonCommand.isValidKey(file, name) &&
+      UpdatePackageJsonCommand.isValidValue(file, name, value)
+    ) {
       // Update the value in the file object
       file[name] = value;
 
@@ -83,7 +86,10 @@ export class UpdatePackageJsonCommand implements Command {
    * @param key - The key to validate.
    * @returns True if the key is valid, false otherwise.
    */
-  private isValidKey(obj: Record<string, unknown>, key: string): boolean {
+  private static isValidKey(
+    obj: Record<string, unknown>,
+    key: string,
+  ): boolean {
     return key in obj;
   }
 
@@ -94,7 +100,7 @@ export class UpdatePackageJsonCommand implements Command {
    * @param value - The value to validate.
    * @returns True if the value is of the same type, false otherwise.
    */
-  private isValidValue(
+  private static isValidValue(
     obj: Record<string, unknown>,
     key: string,
     value: unknown,
