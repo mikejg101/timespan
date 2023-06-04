@@ -27,7 +27,7 @@ export class YearConverter extends DateUnitConverter {
    * The number of milliseconds per year.
    */
   public readonly millisecondsPerUnit =
-    DateUnitConverter.millsecondsInASecond *
+    DateUnitConverter.millisecondsInASecond *
     DateUnitConverter.secondsInAMinute *
     DateUnitConverter.minutesInAnHour *
     DateUnitConverter.hoursInADay *

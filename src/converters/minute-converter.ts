@@ -24,7 +24,8 @@ export class MinuteConverter extends DateUnitConverter {
    * The number of milliseconds per minute (60 * 1000).
    */
   public readonly millisecondsPerUnit =
-    DateUnitConverter.secondsInAMinute * DateUnitConverter.millsecondsInASecond;
+    DateUnitConverter.secondsInAMinute *
+    DateUnitConverter.millisecondsInASecond;
 
   /**
    * An array of aliases for the minute unit.
