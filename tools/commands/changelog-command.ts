@@ -185,10 +185,8 @@ export class ChangelogCommand implements Command {
     taggedCommits: TaggedCommit[],
     filename: string,
   ): void => {
-    const header =
+    let changelog =
       '# Change Log\nAll notable changes to this project will be documented in this file.\n';
-
-    let changelog = header;
 
     // Iterate over each tagged commit
     taggedCommits.forEach((taggedCommit) => {
