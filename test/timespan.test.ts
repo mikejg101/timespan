@@ -1,4 +1,4 @@
-import { Timespan } from '../src/timespan';
+import { Timespan } from '../src';
 
 describe('Timespan', () => {
   const start = new Date('2022-01-01T06:24:00Z');
@@ -440,7 +440,7 @@ describe('Timespan', () => {
       expect(updatedDate.toWeeks()).toBe(expected);
     });
 
-    it('sshould create timespan from months', () => {
+    it('should create timespan from months', () => {
       const amountToAdd = 3;
       const updatedDate = Timespan.fromMonths(amountToAdd);
       const expected = 3;
