@@ -52,7 +52,7 @@ export class ChangelogCommand implements Command {
     toolsJson: ToolsJson,
     packageJson: PackageJson,
   ): string | null => {
-    let tag: string | null = null;
+    let tag: string | null;
     try {
       tag = execSync(`git describe --tags --abbrev=0 ${hash}`, {
         stdio: ['pipe', 'pipe', 'ignore'],
