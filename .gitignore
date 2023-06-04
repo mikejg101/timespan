@@ -118,3 +118,5 @@ dist
 
 # Documentation
 docs/
+
+.idea/
