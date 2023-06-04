@@ -8,7 +8,7 @@ export abstract class DateUnitConverter {
   public static readonly hoursInADay = 24;
   public static readonly minutesInAnHour = 60;
   public static readonly secondsInAMinute = 60;
-  public static readonly millsecondsInASecond = 1000;
+  public static readonly millisecondsInASecond = 1000;
   public static readonly leapYearDivisor = 4;
   public static readonly centuryDivisor = 100;
   public static readonly quadricentennialDivisor = 400;
