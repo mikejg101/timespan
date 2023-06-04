@@ -1,4 +1,4 @@
-import depcheck, { Options, Parser } from 'depcheck';
+import depcheck from 'depcheck';
 import semver from 'semver';
 import { buildHeader } from '../core/header-builder';
 import { readPackageJson } from '../core/read-package-json';
@@ -10,7 +10,7 @@ export class DependenciesCheckCommand implements Command {
   public readonly description = 'Check project dependencies';
   private readonly errorTitle = 'Found Unused Dependencies.';
   private readonly successTitle = 'No Unused Dependencies.';
-  private readonly options: Options = {
+  private readonly options: depcheck.Options = {
     ignoreBinPackage: false,
     skipMissing: false,
     ignorePatterns: ['sandbox'],
@@ -18,7 +18,7 @@ export class DependenciesCheckCommand implements Command {
       '**/*.js': depcheck.parser.es6,
       '**/*.ts': depcheck.parser.typescript,
     },
-    specials: [depcheck.special.eslint] as Parser[],
+    specials: [depcheck.special.eslint] as depcheck.Parser[],
   };
 
   /**
@@ -42,7 +42,7 @@ export class DependenciesCheckCommand implements Command {
     const currentWorkingDirectory = process.cwd();
 
     // Run depcheck
-    const unused = await depcheck(currenWorkingDirectory, this.options);
+    const unused = await depcheck(currentWorkingDirectory, this.options);
     const unusedDependencies: DependencyMap = Object.entries(
       this.getProductionDependencies(),
     ).reduce((deps, [packageName, version]) => {
