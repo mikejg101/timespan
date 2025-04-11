@@ -382,6 +382,17 @@ describe('Timespan', () => {
       expect(updatedDate.toYears()).toBe(expected);
     });
 
+    it('should create timespan from specified units', () => {
+      const amountToAdd = 500;
+      const startDateInMilliseconds = startDate.getTime();
+      const endDateInMilliseconds = new Date(
+        startDate.getTime() + amountToAdd,
+      ).getTime();
+      const updatedDate = Timespan.fromUnits(amountToAdd, 'milliseconds');
+      const expected = endDateInMilliseconds - startDateInMilliseconds;
+      expect(updatedDate.toMilliseconds()).toBe(expected);
+    });
+
     it('should create timespan from milliseconds', () => {
       const amountToAdd = 500;
       const startDateInMilliseconds = startDate.getTime();

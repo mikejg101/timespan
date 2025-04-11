@@ -2,113 +2,134 @@ import { DateUnitConversionTable } from './date-unit-conversion-map';
 import { TimeUnit } from './units-of-time';
 
 /**
- * Calculator for calculating date unit conversions.
+ * Internal shared conversion table used by all date unit calculations.
  */
-export class DateUnitCalculator {
-  /**
-   * The conversion table containing the date unit converters.
-   */
-  private readonly conversionTable: DateUnitConversionTable;
+const conversionTable = new DateUnitConversionTable();
 
-  /**
-   * Constructs a new DateUnitCalculator instance.
-   */
-  public constructor() {
-    this.conversionTable = new DateUnitConversionTable();
+/**
+ * Validates that the input is a valid `Date`.
+ * @param date - The date to validate.
+ * @throws Error if the input is not a valid date.
+ */
+function validateDateInput(date: Date): void {
+  if (!(date instanceof Date) || isNaN(date.getTime())) {
+    throw new Error('Invalid date input.');
   }
+}
 
-  /**
-   * Retrieves the number of milliseconds per unit for the specified unit.
-   * @param unit - The unit to retrieve the milliseconds per unit for.
-   * @returns The number of milliseconds per unit.
-   */
-  public millisecondsPerUnit(unit: TimeUnit): number {
-    this.validateUnitInput(unit);
-    return this.conversionTable.get(unit).millisecondsPerUnit;
+/**
+ * Validates that the value is non-negative.
+ * @param value - The value to validate.
+ * @throws Error if the value is negative.
+ */
+function validateNonNegativeUnitInput(value: number): void {
+  if (value < 0) {
+    throw new Error(`Invalid unit input ${value}.`);
   }
+}
 
-  /**
-   * Retrieves the plural form of the specified unit.
-   * @param unit - The unit to retrieve the plural form for.
-   * @returns The plural form of the unit.
-   */
-  public pluralUnit(unit: TimeUnit): string {
-    this.validateUnitInput(unit);
-    return this.conversionTable.get(unit).plural;
+/**
+ * Validates that the start date is not after the end date.
+ * @param startDate - The start date.
+ * @param endDate - The end date.
+ * @throws Error if the start date is after the end date.
+ */
+function validateDateRange(startDate: Date, endDate: Date): void {
+  if (startDate.getTime() > endDate.getTime()) {
+    throw new Error('Start date cannot be greater than end date.');
   }
+}
 
-  /**
-   * Retrieves the abbreviated form of the specified unit.
-   * @param unit - The unit to retrieve the abbreviated form for.
-   * @returns The abbreviated form of the unit.
-   */
-  public abbreviatedUnit(unit: TimeUnit): string {
-    this.validateUnitInput(unit);
-    return this.conversionTable.get(unit).abbreviation;
+/**
+ * Validates that the given unit is part of the time unit conversion table.
+ * @param unit - The time unit to validate.
+ * @throws Error if the unit is not recognized.
+ */
+function validateUnitInput(unit: TimeUnit): void {
+  if (!conversionTable.getTimeUnits().includes(unit)) {
+    throw new Error(`Invalid date unit: ${unit}.`);
   }
+}
 
-  /**
-   * Adds the specified number of units to the given date.
-   * @param unit - The unit to add.
-   * @param value - The number of units to add.
-   * @param startDate - The start date.
-   * @returns The new date after adding the units.
-   */
-  public addUnits(unit: TimeUnit, value: number, startDate: Date): Date {
-    DateUnitCalculator.throwIfInvalidAdditionInput(value, startDate);
-    this.validateUnitInput(unit);
-    return this.conversionTable.get(unit).add(value, startDate);
-  }
+/**
+ * Throws if input to `addUnits` is invalid.
+ * @param value - The number of units to add.
+ * @param startDate - The start date.
+ */
+function throwIfInvalidAdditionInput(value: number, startDate: Date): void {
+  validateDateInput(startDate);
+  validateNonNegativeUnitInput(value);
+}
 
-  /**
-   * Calculates the number of units between two dates.
-   * @param unit - The unit to calculate.
-   * @param startDate - The start date.
-   * @param endDate - The end date.
-   * @returns The number of units between the two dates.
-   */
-  public between(unit: TimeUnit, startDate: Date, endDate: Date): number {
-    DateUnitCalculator.throwIfInvalidBetweenInput(startDate, endDate);
-    this.validateUnitInput(unit);
-    return this.conversionTable.get(unit).between(startDate, endDate);
-  }
+/**
+ * Throws if input to `between` is invalid.
+ * @param startDate - The start date.
+ * @param endDate - The end date.
+ */
+function throwIfInvalidBetweenInput(startDate: Date, endDate: Date): void {
+  validateDateInput(startDate);
+  validateDateInput(endDate);
+  validateDateRange(startDate, endDate);
+}
 
-  private static validateDateRange(startDate: Date, endDate: Date): void {
-    if (startDate.getTime() > endDate.getTime()) {
-      throw new Error('Start date cannot be greater than end date.');
-    }
-  }
+/**
+ * Retrieves the number of milliseconds per unit for the specified unit.
+ * @param unit - The unit to retrieve the milliseconds per unit for.
+ * @returns The number of milliseconds in one unit.
+ */
+export function millisecondsPerUnit(unit: TimeUnit): number {
+  validateUnitInput(unit);
+  return conversionTable.get(unit).millisecondsPerUnit;
+}
 
-  private static validateNonNegativeUnitInput(value: number): void {
-    if (value < 0) {
-      throw new Error(`Invalid unit input ${value}.`);
-    }
-  }
+/**
+ * Retrieves the plural form of the specified time unit.
+ * @param unit - The unit to convert to plural form.
+ * @returns The plural form of the unit.
+ */
+export function pluralUnit(unit: TimeUnit): string {
+  validateUnitInput(unit);
+  return conversionTable.get(unit).plural;
+}
 
-  private static validateDateInput(date: Date): void {
-    // noinspection SuspiciousTypeOfGuard
-    if (!(date instanceof Date) || isNaN(date.getTime())) {
-      throw new Error('Invalid date input.');
-    }
-  }
+/**
+ * Retrieves the abbreviated form of the specified unit.
+ * @param unit - The unit to retrieve the abbreviation for.
+ * @returns The abbreviated string for the unit.
+ */
+export function abbreviatedUnit(unit: TimeUnit): string {
+  validateUnitInput(unit);
+  return conversionTable.get(unit).abbreviation;
+}
 
-  private validateUnitInput(unit: TimeUnit): void {
-    if (!this.conversionTable.getTimeUnits().includes(unit)) {
-      throw new Error(`Invalid date unit: ${unit}.`);
-    }
-  }
+/**
+ * Adds the specified number of units to a given date.
+ * @param unit - The unit type to add (e.g., 'days', 'months').
+ * @param value - The number of units to add.
+ * @param startDate - The start date.
+ * @returns A new `Date` object with the units added.
+ * @throws Error if inputs are invalid.
+ */
+export function addUnits(unit: TimeUnit, value: number, startDate: Date): Date {
+  throwIfInvalidAdditionInput(value, startDate);
+  validateUnitInput(unit);
+  return conversionTable.get(unit).add(value, startDate);
+}
 
-  private static throwIfInvalidAdditionInput(value: number, startDate: Date) {
-    DateUnitCalculator.validateDateInput(startDate);
-    DateUnitCalculator.validateNonNegativeUnitInput(value);
-  }
-
-  private static throwIfInvalidBetweenInput(
-    startDate: Date,
-    endDate: Date,
-  ): void {
-    DateUnitCalculator.validateDateInput(startDate);
-    DateUnitCalculator.validateDateInput(endDate);
-    DateUnitCalculator.validateDateRange(startDate, endDate);
-  }
+/**
+ * Calculates the number of whole units between two dates.
+ * @param unit - The unit to measure in (e.g., 'weeks', 'years').
+ * @param startDate - The start date.
+ * @param endDate - The end date.
+ * @returns The number of full units between the two dates.
+ * @throws Error if the input dates are invalid or reversed.
+ */
+export function between(
+  unit: TimeUnit,
+  startDate: Date,
+  endDate: Date,
+): number {
+  throwIfInvalidBetweenInput(startDate, endDate);
+  validateUnitInput(unit);
+  return conversionTable.get(unit).between(startDate, endDate);
 }
