@@ -148,7 +148,7 @@ export class Timespan {
    * @returns A Timespan instance representing the parsed timespan.
    * @throws Error if the input is invalid or contains an invalid unit.
    */
-  public static fromString(input: string): Timespan {
+  public static fromString(input: string, startDate: Date = new Date()): Timespan {
     // Limit the possible input string to prevent abuse.
     if (input.length > Timespan.maxInputStringLength) {
       throw new Error(`Invalid input string`);
@@ -189,9 +189,6 @@ export class Timespan {
       // Match the next and run the loop again.
       match = this.inputStringPattern.exec(input);
     }
-
-    // Set the start date as the date we want to count from.
-    const startDate = new Date();
 
     // Set the end date to however many milliseconds we have calculated.
     const endDate = new Date(startDate);
