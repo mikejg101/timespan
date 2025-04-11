@@ -145,10 +145,14 @@ export class Timespan {
    * @example - "1yr 2mos 3wks 4dys 5hrs 6mins 7secs 8mss"
    * @example - "2years 1month 3weeks 4days"
    * @param input - The input string representing the timespan.
+   * @param startDate - Optional start date for the timespan. If not provided, the current date is used.
    * @returns A Timespan instance representing the parsed timespan.
    * @throws Error if the input is invalid or contains an invalid unit.
    */
-  public static fromString(input: string, startDate: Date = new Date()): Timespan {
+  public static fromString(
+    input: string,
+    startDate: Date = new Date(),
+  ): Timespan {
     // Limit the possible input string to prevent abuse.
     if (input.length > Timespan.maxInputStringLength) {
       throw new Error(`Invalid input string`);
