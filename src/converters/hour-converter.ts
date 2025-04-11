@@ -26,7 +26,7 @@ export class HourConverter extends DateUnitConverter {
   public readonly millisecondsPerUnit =
     DateUnitConverter.minutesInAnHour *
     DateUnitConverter.secondsInAMinute *
-    DateUnitConverter.millsecondsInASecond;
+    DateUnitConverter.millisecondsInASecond;
 
   /**
    * An array of aliases for the hour unit.

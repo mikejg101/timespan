@@ -27,7 +27,7 @@ export class DayConverter extends DateUnitConverter {
     DateUnitConverter.hoursInADay *
     DateUnitConverter.minutesInAnHour *
     DateUnitConverter.secondsInAMinute *
-    DateUnitConverter.millsecondsInASecond;
+    DateUnitConverter.millisecondsInASecond;
 
   /**
    * An array of aliases for the day unit.

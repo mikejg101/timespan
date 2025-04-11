@@ -8,7 +8,7 @@ export abstract class DateUnitConverter {
   public static readonly hoursInADay = 24;
   public static readonly minutesInAnHour = 60;
   public static readonly secondsInAMinute = 60;
-  public static readonly millsecondsInASecond = 1000;
+  public static readonly millisecondsInASecond = 1000;
   public static readonly leapYearDivisor = 4;
   public static readonly centuryDivisor = 100;
   public static readonly quadricentennialDivisor = 400;
@@ -61,21 +61,21 @@ export abstract class DateUnitConverter {
    */
   public isLeapYear(year: number): boolean {
     return (
-      (this.isDivisibleByLeapYearDivisor(year) &&
-        !this.isDivisibleByCenturyDivisor(year)) ||
-      this.isDivisibleByQuadricentennialDivisor(year)
+      (DateUnitConverter.isDivisibleByLeapYearDivisor(year) &&
+        !DateUnitConverter.isDivisibleByCenturyDivisor(year)) ||
+      DateUnitConverter.isDivisibleByQuadricentennialDivisor(year)
     );
   }
 
-  private isDivisibleByLeapYearDivisor(year: number): boolean {
+  private static isDivisibleByLeapYearDivisor(year: number): boolean {
     return year % DateUnitConverter.leapYearDivisor === 0;
   }
 
-  private isDivisibleByCenturyDivisor(year: number): boolean {
+  private static isDivisibleByCenturyDivisor(year: number): boolean {
     return year % DateUnitConverter.centuryDivisor === 0;
   }
 
-  private isDivisibleByQuadricentennialDivisor(year: number): boolean {
+  private static isDivisibleByQuadricentennialDivisor(year: number): boolean {
     return year % DateUnitConverter.quadricentennialDivisor === 0;
   }
 }

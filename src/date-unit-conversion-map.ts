@@ -68,6 +68,20 @@ export class DateUnitConversionTable {
   };
 
   /**
+   * Get the time unit available in the conversion table.
+   * @returns The available time units.
+   */
+  public getTimeUnits(): string[] {
+    const timeUnits: string[] = [];
+    for (const key of Object.keys(this.conversionTable)) {
+      this.conversionTable[key as TimeUnit].aliases.forEach((alias) =>
+        timeUnits.push(alias),
+      );
+    }
+    return timeUnits;
+  }
+
+  /**
    * Retrieves the date unit converter for the specified unit.
    * @param unit - The unit to retrieve the converter for.
    * @returns The date unit converter.

@@ -25,7 +25,7 @@ export class Timespan {
 
   /**
    * We precalculate the string value when the Timespan
-   * is created so you don't incure as much memory cost generating
+   * is created so you don't incur as much memory cost generating
    * it when you want to use it.
    */
   private readonly stringValue: string;
@@ -33,7 +33,7 @@ export class Timespan {
   /**
    * We go ahead and generate the TimeFrame when the Timespan
    * is created. This way you can go ahead and get the timeframe
-   * at only point without incuring any extra memory cost.
+   * at only point without incurring any extra memory cost.
    */
   private readonly timeFrame: TimeFrame;
 
@@ -137,7 +137,7 @@ export class Timespan {
    * "@#$": This input does not match the pattern because it contains special
    * characters that are not part of the allowed character set.
    */
-  private static readonly allowedWhitspacePattern = /^[a-zA-Z0-9\s]+$/;
+  private static readonly allowedWhitespacePattern = /^[a-zA-Z0-9\s]+$/;
 
   /**
    * Create a Timespan instance from a string input.
@@ -148,14 +148,14 @@ export class Timespan {
    * @returns A Timespan instance representing the parsed timespan.
    * @throws Error if the input is invalid or contains an invalid unit.
    */
-  public static fromString(input: string): Timespan {
+  public static fromString(input: string, startDate: Date = new Date()): Timespan {
     // Limit the possible input string to prevent abuse.
     if (input.length > Timespan.maxInputStringLength) {
       throw new Error(`Invalid input string`);
     }
 
     // Whitelist specific characters.
-    if (!Timespan.allowedWhitspacePattern.test(input)) {
+    if (!Timespan.allowedWhitespacePattern.test(input)) {
       throw new Error(`Invalid input string`);
     }
 
@@ -189,9 +189,6 @@ export class Timespan {
       // Match the next and run the loop again.
       match = this.inputStringPattern.exec(input);
     }
-
-    // Set the start date as the date we want to count from.
-    const startDate = new Date();
 
     // Set the end date to however many milliseconds we have calculated.
     const endDate = new Date(startDate);
@@ -471,7 +468,7 @@ export class Timespan {
     };
     const tempDate = new Date(this.startDate);
 
-    // Calulating the years and months is... complicated.
+    // Calculating the years and months is... complicated.
     timeFrame.years = Timespan.dateUnitCalculator.between(
       'years',
       this.startDate,

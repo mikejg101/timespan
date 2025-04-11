@@ -10,23 +10,11 @@ export class DateUnitCalculator {
    */
   private readonly conversionTable: DateUnitConversionTable;
 
-  private readonly timeUnitKeys: TimeUnit[] = [];
-
   /**
    * Constructs a new DateUnitCalculator instance.
    */
   public constructor() {
     this.conversionTable = new DateUnitConversionTable();
-    this.timeUnitKeys = this.timeUnitKeys.concat(
-      this.conversionTable.get('years').aliases as TimeUnit[],
-      this.conversionTable.get('months').aliases as TimeUnit[],
-      this.conversionTable.get('weeks').aliases as TimeUnit[],
-      this.conversionTable.get('days').aliases as TimeUnit[],
-      this.conversionTable.get('hours').aliases as TimeUnit[],
-      this.conversionTable.get('minutes').aliases as TimeUnit[],
-      this.conversionTable.get('seconds').aliases as TimeUnit[],
-      this.conversionTable.get('milliseconds').aliases as TimeUnit[],
-    );
   }
 
   /**
@@ -67,7 +55,8 @@ export class DateUnitCalculator {
    * @returns The new date after adding the units.
    */
   public addUnits(unit: TimeUnit, value: number, startDate: Date): Date {
-    this.throwIfInvalidAdditionInput(unit, value, startDate);
+    DateUnitCalculator.throwIfInvalidAdditionInput(value, startDate);
+    this.validateUnitInput(unit);
     return this.conversionTable.get(unit).add(value, startDate);
   }
 
@@ -79,52 +68,47 @@ export class DateUnitCalculator {
    * @returns The number of units between the two dates.
    */
   public between(unit: TimeUnit, startDate: Date, endDate: Date): number {
-    this.throwIfInvalidBetweenInput(unit, startDate, endDate);
+    DateUnitCalculator.throwIfInvalidBetweenInput(startDate, endDate);
+    this.validateUnitInput(unit);
     return this.conversionTable.get(unit).between(startDate, endDate);
   }
 
-  private validateDateRange(startDate: Date, endDate: Date): void {
+  private static validateDateRange(startDate: Date, endDate: Date): void {
     if (startDate.getTime() > endDate.getTime()) {
       throw new Error('Start date cannot be greater than end date.');
     }
   }
 
-  private validateNonNegativeUnitInput(value: number): void {
+  private static validateNonNegativeUnitInput(value: number): void {
     if (value < 0) {
       throw new Error(`Invalid unit input ${value}.`);
     }
   }
 
-  private validateDateInput(date: Date): void {
+  private static validateDateInput(date: Date): void {
+    // noinspection SuspiciousTypeOfGuard
     if (!(date instanceof Date) || isNaN(date.getTime())) {
       throw new Error('Invalid date input.');
     }
   }
 
   private validateUnitInput(unit: TimeUnit): void {
-    if (!this.timeUnitKeys.includes(unit)) {
+    if (!this.conversionTable.getTimeUnits().includes(unit)) {
       throw new Error(`Invalid date unit: ${unit}.`);
     }
   }
 
-  private throwIfInvalidAdditionInput(
-    unit: TimeUnit,
-    value: number,
-    startDate: Date,
-  ) {
-    this.validateUnitInput(unit);
-    this.validateDateInput(startDate);
-    this.validateNonNegativeUnitInput(value);
+  private static throwIfInvalidAdditionInput(value: number, startDate: Date) {
+    DateUnitCalculator.validateDateInput(startDate);
+    DateUnitCalculator.validateNonNegativeUnitInput(value);
   }
 
-  private throwIfInvalidBetweenInput(
-    unit: TimeUnit,
+  private static throwIfInvalidBetweenInput(
     startDate: Date,
     endDate: Date,
   ): void {
-    this.validateUnitInput(unit);
-    this.validateDateInput(startDate);
-    this.validateDateInput(endDate);
-    this.validateDateRange(startDate, endDate);
+    DateUnitCalculator.validateDateInput(startDate);
+    DateUnitCalculator.validateDateInput(endDate);
+    DateUnitCalculator.validateDateRange(startDate, endDate);
   }
 }

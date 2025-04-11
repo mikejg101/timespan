@@ -1,4 +1,4 @@
-import { Timespan } from '../src/timespan';
+import { Timespan } from '../src';
 
 describe('Timespan', () => {
   const start = new Date('2022-01-01T06:24:00Z');
@@ -193,49 +193,53 @@ describe('Timespan', () => {
     ];
 
     it('should create a Timespan object from a valid string input', () => {
-      const timespan = Timespan.fromString('1y 2M 3w 4d 5h 6m 7s 8ms');
+      const baseDate = new Date(Date.UTC(2000, 0, 1));
+      const timespan = Timespan.fromString('1y 2M 3w 4d 5h 6m 7s 8ms', baseDate);
 
       // Check the properties of the Timespan object
       expect(timespan.toYears()).toBe(1);
       expect(timespan.toMonths()).toBe(14);
       expect(timespan.toWeeks()).toBe(64);
-      expect(timespan.toDays()).toBe(452);
-      expect(timespan.toHours()).toBe(10853);
-      expect(timespan.toMinutes()).toBe(651186);
-      expect(timespan.toSeconds()).toBe(39071167);
-      expect(timespan.toMilliseconds()).toBe(39071167008);
+      expect(timespan.toDays()).toBe(450);
+      expect(timespan.toHours()).toBe(10805);
+      expect(timespan.toMinutes()).toBe(648306);
+      expect(timespan.toSeconds()).toBe(38898367);
+      expect(timespan.toMilliseconds()).toBe(38898367008);
 
       // Check the string representation of the Timespan object
       expect(timespan.toString()).toBe('1y 2M 3w 4d 5h 6m 7s 8ms');
     });
 
     it('should handle singular and plural units', () => {
-      const timespan = Timespan.fromString('2years 1month 3weeks 4days');
+      const baseDate = new Date(Date.UTC(2000, 0, 1));
+      const timespan = Timespan.fromString('2years 1month 3weeks 4days', baseDate);
 
       // Check the properties of the Timespan object
       expect(timespan.toYears()).toBe(2);
       expect(timespan.toMonths()).toBe(25);
       expect(timespan.toWeeks()).toBe(112);
-      expect(timespan.toDays()).toBe(786);
+      expect(timespan.toDays()).toBe(787);
 
       // Check the string representation of the Timespan object
       expect(timespan.toString()).toBe('2y 1M 3w 4d');
     });
 
     it('should handle different unit abbreviations', () => {
+      const baseDate = new Date(Date.UTC(2000, 0, 1));
       const timespan = Timespan.fromString(
         '1yr 2mos 3wks 4dys 5hrs 6mins 7secs 8mss',
+        baseDate,
       );
 
       // Check the properties of the Timespan object
       expect(timespan.toYears()).toBe(1);
       expect(timespan.toMonths()).toBe(14);
       expect(timespan.toWeeks()).toBe(64);
-      expect(timespan.toDays()).toBe(452);
-      expect(timespan.toHours()).toBe(10853);
-      expect(timespan.toMinutes()).toBe(651186);
-      expect(timespan.toSeconds()).toBe(39071167);
-      expect(timespan.toMilliseconds()).toBe(39071167008);
+      expect(timespan.toDays()).toBe(450);
+      expect(timespan.toHours()).toBe(10805);
+      expect(timespan.toMinutes()).toBe(648306);
+      expect(timespan.toSeconds()).toBe(38898367);
+      expect(timespan.toMilliseconds()).toBe(38898367008);
 
       // Check the string representation of the Timespan object
       expect(timespan.toString()).toBe('1y 2M 3w 4d 5h 6m 7s 8ms');
@@ -440,7 +444,7 @@ describe('Timespan', () => {
       expect(updatedDate.toWeeks()).toBe(expected);
     });
 
-    it('sshould create timespan from months', () => {
+    it('should create timespan from months', () => {
       const amountToAdd = 3;
       const updatedDate = Timespan.fromMonths(amountToAdd);
       const expected = 3;

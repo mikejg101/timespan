@@ -52,7 +52,7 @@ export class ChangelogCommand implements Command {
     toolsJson: ToolsJson,
     packageJson: PackageJson,
   ): string | null => {
-    let tag: string | null = null;
+    let tag: string | null;
     try {
       tag = execSync(`git describe --tags --abbrev=0 ${hash}`, {
         stdio: ['pipe', 'pipe', 'ignore'],
@@ -185,10 +185,8 @@ export class ChangelogCommand implements Command {
     taggedCommits: TaggedCommit[],
     filename: string,
   ): void => {
-    const header =
+    let changelog =
       '# Change Log\nAll notable changes to this project will be documented in this file.\n';
-
-    let changelog = header;
 
     // Iterate over each tagged commit
     taggedCommits.forEach((taggedCommit) => {
