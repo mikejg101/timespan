@@ -1,6 +1,6 @@
 {
   "name": "@undercroft/timespan",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -17,6 +17,29 @@
     "type": "git",
     "url": "git@github.com:mikejg101/timespan.git"
   },
+  "keywords": [
+    "timespan",
+    "duration",
+    "date",
+    "time",
+    "datetime",
+    "timeframe",
+    "interval",
+    "javascript",
+    "typescript",
+    "time parser",
+    "time formatter",
+    "human-readable",
+    "date math",
+    "date utilities",
+    "date calculation",
+    "library",
+    "esm",
+    "umd",
+    "node",
+    "browser",
+    "undercroft"
+  ],
   "bugs": {
     "url": "https://github.com/mikejg101/timespan/issues"
   },
