@@ -2,6 +2,7 @@
 const resolve = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const terser = require('@rollup/plugin-terser');
+const { codecovRollupPlugin } = require('@codecov/rollup-plugin');
 
 module.exports = {
   input: 'dist/index.js',
@@ -11,5 +12,14 @@ module.exports = {
     name: 'Timespan',
     sourcemap: true,
   },
-  plugins: [resolve(), commonjs(), terser()],
+  plugins: [
+    resolve(),
+    commonjs(),
+    terser(),
+    codecovRollupPlugin({
+      enableBundleAnalysis: process.env.CODECOV_TOKEN !== undefined,
+      bundleName: 'Timespan',
+      uploadToken: process.env.CODECOV_TOKEN,
+    }),
+  ],
 };
