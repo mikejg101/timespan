@@ -2,19 +2,30 @@
 
 When dealing with time durations or intervals in JavaScript, it's often useful to have a reliable way to represent and manipulate them. The `Timespan` class provides a convenient and powerful solution for working with timespans in JavaScript.
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/mikejg101/timespan/publish.yml)](https://img.shields.io/github/actions/workflow/status/mikejg101/timespan/publish.yml) [![Issues Status](https://img.shields.io/github/issues/mikejg101/timespan)](https://img.shields.io/github/issues/mikejg101/timespan) [![Pull Request Status](https://img.shields.io/github/issues-pr-raw/mikejg101/timespan)](https://img.shields.io/github/issues-pr-raw/mikejg101/timespan) [![NPM Version Status](https://img.shields.io/npm/v/@undercroft/timespan)](https://img.shields.io/npm/v/@undercroft/timespan) [![License Status](https://img.shields.io/github/license/mikejg101/timespan)](https://img.shields.io/github/license/mikejg101/timespan)  
+[![Build Status](https://img.shields.io/github/actions/workflow/status/mikejg101/timespan/publish.yml)](https://img.shields.io/github/actions/workflow/status/mikejg101/timespan/publish.yml) [![Issues Status](https://img.shields.io/github/issues/mikejg101/timespan)](https://img.shields.io/github/issues/mikejg101/timespan) [![Pull Request Status](https://img.shields.io/github/issues-pr-raw/mikejg101/timespan)](https://img.shields.io/github/issues-pr-raw/mikejg101/timespan) [![NPM Version Status](https://img.shields.io/npm/v/@undercroft/timespan)](https://img.shields.io/npm/v/@undercroft/timespan) [![License Status](https://img.shields.io/github/license/mikejg101/timespan)](https://img.shields.io/github/license/mikejg101/timespan)
 
 # Installation
 
+## Usage in NodeJS
 ```shell
 npm install @undercroft/timespan
 ```
-
-Usage
-To use the Timespan class in your JavaScript project, import it as follows:
-
+Then use it like this.
 ```javascript
 import { Timespan } from '@undercroft/timespan';
+```
+
+## Usage in Browser
+```angular2html
+<script src="https://cdn.jsdelivr.net/npm/@undercroft/timespan/dist/index.umd.js"></script>
+```
+Then use it like this.
+```html
+
+<script>
+  const span = new window.Timespan(new Date(), new Date());
+  console.log(span.toMilliseconds());
+</script>
 ```
 
 # Creating Timespans

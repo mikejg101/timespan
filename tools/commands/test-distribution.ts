@@ -1,9 +1,6 @@
 import { Command } from '../types/command';
 import { buildHeader } from '../core/header-builder';
-
-// We must import from the built package. This is important to make
-// sure we are testing the distribution package.
-import { Timespan } from '../../dist/index';
+import { requireDistExport } from '../require-dist-export';
 
 export class TestDistribution implements Command {
   public readonly command = 'test:distribution';
@@ -22,6 +19,12 @@ export class TestDistribution implements Command {
   }
 
   private runTests() {
+    // We must import from the built package. This is important to make
+    // sure we are testing the distribution package.
+    const Timespan =
+      requireDistExport<typeof import('../../src/timespan').Timespan>(
+        'Timespan',
+      );
     const baseDate = new Date(Date.UTC(2000, 0, 1));
     const timespan = Timespan.fromString(
       '1yr 2mos 3wks 4dys 5hrs 6mins 7secs 8mss',

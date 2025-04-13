@@ -24,7 +24,8 @@
     "postinstall": "husky install",
     "prepublishOnly": "pinst --disable && npm run test:dist",
     "postpublish": "pinst --enable",
-    "build": "ts-node tools/undertools.ts clean && tsup src/index.ts --dts --format esm,cjs --out-dir dist --minify",
+    "build": "npm run clean && tsup src/index.ts --dts --format esm,cjs --minify --sourcemap --out-dir dist && npm run build:umd",
+    "build:umd": "rollup -c",
     "license-check": "ts-node tools/undertools.ts licenses-check",
     "dep-check": "ts-node tools/undertools.ts dependencies-check",
     "clean": "ts-node tools/undertools.ts clean",
@@ -44,6 +45,9 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^13.1.0",
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
     "@size-limit/preset-small-lib": "^11.2.0",
     "@swc/core": "^1.11.20",
     "@types/intersect": "^1.0.0",
@@ -74,6 +78,6 @@
     "typedoc": "^0.24.7",
     "typedoc-github-wiki-theme": "^1.1.0",
     "typedoc-plugin-markdown": "^3.15.3",
-    "typescript": "^4.4.3"
+    "typescript": "^4.9.5"
   }
 }
