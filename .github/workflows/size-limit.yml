@@ -27,7 +27,7 @@ jobs:
         if: steps.has_config.outputs.found == 'true' && github.base_ref != ''
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '23'
 
       - name: Install dependencies
         if: steps.has_config.outputs.found == 'true' && github.base_ref != ''
