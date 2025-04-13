@@ -14,31 +14,18 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v3
 
-      - name: Check for size-limit config
-        id: has_config
-        run: |
-          if [ -f "./.size-limit.js" ] || [ -f "./size-limit.config.js" ] || [ -f "./.size-limit.json" ]; then
-            echo "found=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "found=false" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Set up Node.js
-        if: steps.has_config.outputs.found == 'true' && github.base_ref != ''
         uses: actions/setup-node@v3
         with:
           node-version: '23'
 
       - name: Install dependencies
-        if: steps.has_config.outputs.found == 'true' && github.base_ref != ''
         run: npm ci
 
-      - name: Build project (if needed for bundle check)
-        if: steps.has_config.outputs.found == 'true' && github.base_ref != ''
+      - name: Build project
         run: npm run build
 
       - name: Run size-limit
-        if: steps.has_config.outputs.found == 'true' && github.base_ref != ''
         uses: andresz1/size-limit-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
