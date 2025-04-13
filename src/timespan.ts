@@ -1,12 +1,10 @@
-import { TimeFrame } from './timeframe';
-import { TimeUnit } from './units-of-time';
-import {
-  calculateString,
-  calculateTimeFrame,
-  calculateTimespanFromString,
-  calculateTimespanFromUnits,
-  calculateUnitsFromTimespan,
-} from './timespan-utils';
+import { TimeFrame } from './types/timeframe';
+import { TimeUnit } from './types';
+import { calculateTimeFrame, timeFrameToString } from './utils';
+import { getConverter } from './unit-conversion-map';
+import { createTimeframe } from './type-utils/create-timeframe';
+import * as Assertions from './assertions';
+import Constants from './constants';
 
 /**
  * Represents a time span between two dates.
@@ -42,10 +40,13 @@ export class Timespan {
    * @param end - The end date of the timespan.
    */
   constructor(start: Date, end: Date) {
+    Assertions.assertValidDate(start);
+    Assertions.assertValidDate(end);
+    Assertions.assertValidDateRange(start, end);
     this.startDate = start;
     this.endDate = end;
     this.timeFrame = calculateTimeFrame(start, end);
-    this.stringValue = calculateString(this.timeFrame);
+    this.stringValue = timeFrameToString(this.timeFrame);
   }
 
   /**
@@ -74,8 +75,54 @@ export class Timespan {
    * @returns A Timespan instance representing the parsed timespan.
    * @throws Error if the input is invalid or contains an invalid unit.
    */
-  public static fromString = (input: string, startDate?: Date): Timespan =>
-    calculateTimespanFromString(input, startDate);
+  public static fromString = (input: string, startDate?: Date): Timespan => {
+    const start = startDate ? startDate : new Date();
+    Assertions.assertValidDate(start);
+    Assertions.assertMaxInputLength(input);
+    Assertions.assertAllowedCharacters(input);
+
+    const timeframe: TimeFrame = createTimeframe();
+
+    // Start matching the regex.
+    let match = Constants.InputRegexPattern.exec(input);
+
+    // Check to see if we don't have a match.
+    if (!match) {
+      throw new Error(`Invalid unit`);
+    }
+
+    // Loop over the matches as we make more matches.
+    while (match) {
+      const value = Number(match[Constants.InputRegexValueIndex]);
+      const unit: string = match[Constants.InputRegexUnitIndex];
+      Assertions.assertValidTimeUnit(unit);
+      const plural = getConverter(unit).plural;
+      timeframe[plural] = value;
+
+      // Match the next and run the loop again.
+      match = Constants.InputRegexPattern.exec(input);
+    }
+
+    // Set the end date to however many milliseconds we have calculated.
+    const endDate = new Date(start);
+
+    endDate.setUTCFullYear(endDate.getUTCFullYear() + timeframe.years);
+    endDate.setUTCMonth(endDate.getUTCMonth() + timeframe.months);
+    endDate.setUTCDate(
+      endDate.getUTCDate() + timeframe.weeks * Constants.DaysPerWeek,
+    );
+    endDate.setUTCDate(endDate.getUTCDate() + timeframe.days);
+    endDate.setUTCHours(endDate.getUTCHours() + timeframe.hours);
+    endDate.setUTCMinutes(endDate.getUTCMinutes() + timeframe.minutes);
+    endDate.setUTCSeconds(endDate.getUTCSeconds() + timeframe.seconds);
+    endDate.setUTCMilliseconds(
+      endDate.getUTCMilliseconds() + timeframe.milliseconds,
+    );
+
+    // Return the new timespan to the consumer. Since the timespan does all
+    // timeframe and string calculations on initialization, our job here is done.
+    return new Timespan(start, endDate);
+  };
 
   /**
    * Creates a Timespan from the specified number of units.
@@ -88,7 +135,18 @@ export class Timespan {
     amount: number,
     unit: TimeUnit,
     startDate?: Date,
-  ): Timespan => calculateTimespanFromUnits(amount, unit, startDate);
+  ): Timespan => {
+    const start = startDate || new Date();
+    Assertions.assertValidDate(start);
+    Assertions.assertValidTimeUnit(unit);
+    if (amount < 0) {
+      throw new Error(`Invalid unit input ${amount}.`);
+    }
+    const converter = getConverter(unit);
+    const endDate = converter.add(amount, start);
+    Assertions.assertValidDateRange(start, endDate);
+    return new Timespan(start, endDate);
+  };
 
   /**
    * Creates a Timespan object from a specified number of milliseconds.
@@ -99,7 +157,7 @@ export class Timespan {
   public static fromMilliseconds = (
     millis: number,
     startDate?: Date,
-  ): Timespan => calculateTimespanFromUnits(millis, 'milliseconds', startDate);
+  ): Timespan => this.fromUnits(millis, 'milliseconds', startDate);
 
   /**
    * Creates a Timespan object from a specified number of seconds.
@@ -108,7 +166,7 @@ export class Timespan {
    * @returns A Timespan object representing the specified number of seconds.
    */
   public static fromSeconds = (seconds: number, startDate?: Date): Timespan =>
-    calculateTimespanFromUnits(seconds, 'seconds', startDate);
+    this.fromUnits(seconds, 'seconds', startDate);
 
   /**
    * Creates a Timespan object from a specified number of minutes.
@@ -117,7 +175,7 @@ export class Timespan {
    * @returns A Timespan object representing the specified number of minutes.
    */
   public static fromMinutes = (minutes: number, startDate?: Date): Timespan =>
-    calculateTimespanFromUnits(minutes, 'minutes', startDate);
+    this.fromUnits(minutes, 'minutes', startDate);
 
   /**
    * Creates a Timespan object from a specified number of hours.
@@ -126,7 +184,7 @@ export class Timespan {
    * @returns A Timespan object representing the specified number of hours.
    */
   public static fromHours = (hours: number, startDate?: Date): Timespan =>
-    calculateTimespanFromUnits(hours, 'hours', startDate);
+    this.fromUnits(hours, 'hours', startDate);
 
   /**
    * Creates a Timespan object from a specified number of days.
@@ -135,7 +193,7 @@ export class Timespan {
    * @returns A Timespan object representing the specified number of days.
    */
   public static fromDays = (days: number, startDate?: Date): Timespan =>
-    calculateTimespanFromUnits(days, 'days', startDate);
+    this.fromUnits(days, 'days', startDate);
 
   /**
    * Creates a Timespan object from a specified number of weeks.
@@ -144,7 +202,7 @@ export class Timespan {
    * @returns A Timespan object representing the specified number of weeks.
    */
   public static fromWeeks = (weeks: number, startDate?: Date): Timespan =>
-    calculateTimespanFromUnits(weeks, 'weeks', startDate);
+    this.fromUnits(weeks, 'weeks', startDate);
 
   /**
    * Creates a Timespan object from a specified number of months.
@@ -153,7 +211,7 @@ export class Timespan {
    * @returns A Timespan object representing the specified number of months.
    */
   public static fromMonths = (months: number, startDate?: Date): Timespan =>
-    calculateTimespanFromUnits(months, 'months', startDate);
+    this.fromUnits(months, 'months', startDate);
 
   /**
    * Creates a Timespan object from a specified number of years.
@@ -162,7 +220,7 @@ export class Timespan {
    * @returns A Timespan object representing the specified number of years.
    */
   public static fromYears = (years: number, startDate?: Date): Timespan =>
-    calculateTimespanFromUnits(years, 'years', startDate);
+    this.fromUnits(years, 'years', startDate);
 
   /**
    * Convert the timespan to a TimeFrame object.
@@ -181,8 +239,11 @@ export class Timespan {
    * @param unit - The unit of time
    * @returns The duration in the specified time unit.
    */
-  public toUnit = (unit: TimeUnit): number =>
-    calculateUnitsFromTimespan(unit, this.startDate, this.endDate);
+  public toUnit = (unit: TimeUnit): number => {
+    Assertions.assertValidTimeUnit(unit);
+    const converter = getConverter(unit);
+    return converter.between(this.startDate, this.endDate);
+  };
 
   /**
    * Convert the timespan to the total duration in milliseconds.

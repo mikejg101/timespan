@@ -1,5 +1,6 @@
-import { MinuteUnit } from '../units-of-time';
 import { DateUnitConverter } from './date-unit-converter';
+import Constants from '../constants';
+import { MinuteUnit } from '../types';
 
 /**
  * Represents a converter for the minute unit.
@@ -24,8 +25,7 @@ export class MinuteConverter extends DateUnitConverter {
    * The number of milliseconds per minute (60 * 1000).
    */
   public readonly millisecondsPerUnit =
-    DateUnitConverter.secondsInAMinute *
-    DateUnitConverter.millisecondsInASecond;
+    Constants.SecondsPerMinute * Constants.MillisecondsPerSecond;
 
   /**
    * An array of aliases for the minute unit.

@@ -1,5 +1,5 @@
-import { SecondUnit } from '../units-of-time';
 import { DateUnitConverter } from './date-unit-converter';
+import { SecondUnit } from '../types';
 
 /**
  * Represents a converter for the second unit.
