@@ -1,14 +1,14 @@
-name: "size"
-on:
-  pull_request:
-    branches:
-      - master
-      - main
-jobs:
-  size:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: andresz1/size-limit-action@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+- name: Check for size-limit config
+  id: has_config
+  run: |
+    if [ -f "./.size-limit.js" ] || [ -f "./size-limit.config.js" ] || [ -f "./.size-limit.json" ]; then
+      echo "found=true" >> "$GITHUB_OUTPUT"
+    else
+      echo "found=false" >> "$GITHUB_OUTPUT"
+    fi
+
+- name: Run size-limit
+  if: steps.has_config.outputs.found == 'true'
+  uses: andresz1/size-limit-action@v1
+  with:
+    github_token: ${{ secrets.GITHUB_TOKEN }}
