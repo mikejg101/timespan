@@ -37,7 +37,7 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
-        node: [14.x, 16.x]
+        node: [ 14.x, 16.x ]
 
     steps:
       - uses: actions/checkout@v2
@@ -47,5 +47,10 @@ jobs:
           node-version: ${{ matrix.node }}
       - name: Install modules
         run: npm install
-      - name: Run tests
-        run: npm run test
+      - name: Run tests with coverage
+        run: npm run test -- --coverage
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
