@@ -1,5 +1,5 @@
-import { MillisecondUnit } from '../units-of-time';
 import { DateUnitConverter } from './date-unit-converter';
+import { MillisecondUnit } from '../types';
 
 /**
  * Represents a converter for the millisecond unit.

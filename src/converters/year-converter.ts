@@ -1,5 +1,6 @@
-import { YearUnit } from '../units-of-time';
 import { DateUnitConverter } from './date-unit-converter';
+import Constants from '../constants';
+import { YearUnit } from '../types';
 
 /**
  * Represents a converter for the year unit.
@@ -27,11 +28,11 @@ export class YearConverter extends DateUnitConverter {
    * The number of milliseconds per year.
    */
   public readonly millisecondsPerUnit =
-    DateUnitConverter.millisecondsInASecond *
-    DateUnitConverter.secondsInAMinute *
-    DateUnitConverter.minutesInAnHour *
-    DateUnitConverter.hoursInADay *
-    DateUnitConverter.daysInAYear;
+    Constants.DaysPerYear *
+    Constants.HoursPerDay *
+    Constants.MinutesPerHour *
+    Constants.SecondsPerMinute *
+    Constants.MillisecondsPerSecond;
 
   /**
    * An array of aliases for the year unit.

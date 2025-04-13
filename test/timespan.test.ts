@@ -4,6 +4,16 @@ describe('Timespan', () => {
   const start = new Date('2022-01-01T06:24:00Z');
   const end = new Date('2023-02-21T10:52:00Z');
 
+  describe('constructor', () => {
+    it('should throw an error if the start date is greater than the end date', () => {
+      const startDate = new Date('2023-06-01');
+      const endDate = new Date('2023-05-31');
+      expect(() => new Timespan(startDate, endDate)).toThrow(
+        'Start date cannot be greater than end date.',
+      );
+    });
+  });
+
   describe('start', () => {
     it('should return the start date', () => {
       const timespan = new Timespan(start, end);
@@ -15,6 +25,22 @@ describe('Timespan', () => {
     it('should return the end date', () => {
       const timespan = new Timespan(start, end);
       expect(timespan.end).toBe(end);
+    });
+  });
+
+  describe('fromUnits', () => {
+    it('should throw an error for invalid date input', () => {
+      const startDate = '2023-05-01' as any;
+      expect(() => Timespan.fromUnits(5, 'year', startDate)).toThrow(
+        'Invalid date input.',
+      );
+    });
+
+    it('should throw an error for negative day input', () => {
+      const startDate = new Date('2023-05-01');
+      expect(() => Timespan.fromUnits(-5, 'year', startDate)).toThrow(
+        'Invalid unit input -5.',
+      );
     });
   });
 
@@ -72,6 +98,13 @@ describe('Timespan', () => {
     it('should return the string representation of the timespan', () => {
       const timespan = new Timespan(start, end);
       expect(timespan.toString()).toBe('1y 1M 2w 6d 4h 28m');
+    });
+  });
+
+  describe('toUnit', () => {
+    it('should return the time span in the specified unit', () => {
+      const timespan = new Timespan(start, end);
+      expect(timespan.toUnit('milliseconds')).toBe(35958480000);
     });
   });
 
@@ -194,7 +227,10 @@ describe('Timespan', () => {
 
     it('should create a Timespan object from a valid string input', () => {
       const baseDate = new Date(Date.UTC(2000, 0, 1));
-      const timespan = Timespan.fromString('1y 2M 3w 4d 5h 6m 7s 8ms', baseDate);
+      const timespan = Timespan.fromString(
+        '1y 2M 3w 4d 5h 6m 7s 8ms',
+        baseDate,
+      );
 
       // Check the properties of the Timespan object
       expect(timespan.toYears()).toBe(1);
@@ -212,7 +248,10 @@ describe('Timespan', () => {
 
     it('should handle singular and plural units', () => {
       const baseDate = new Date(Date.UTC(2000, 0, 1));
-      const timespan = Timespan.fromString('2years 1month 3weeks 4days', baseDate);
+      const timespan = Timespan.fromString(
+        '2years 1month 3weeks 4days',
+        baseDate,
+      );
 
       // Check the properties of the Timespan object
       expect(timespan.toYears()).toBe(2);
@@ -382,6 +421,17 @@ describe('Timespan', () => {
       expect(updatedDate.toYears()).toBe(expected);
     });
 
+    it('should create timespan from specified units', () => {
+      const amountToAdd = 500;
+      const startDateInMilliseconds = startDate.getTime();
+      const endDateInMilliseconds = new Date(
+        startDate.getTime() + amountToAdd,
+      ).getTime();
+      const updatedDate = Timespan.fromUnits(amountToAdd, 'milliseconds');
+      const expected = endDateInMilliseconds - startDateInMilliseconds;
+      expect(updatedDate.toMilliseconds()).toBe(expected);
+    });
+
     it('should create timespan from milliseconds', () => {
       const amountToAdd = 500;
       const startDateInMilliseconds = startDate.getTime();
@@ -449,6 +499,17 @@ describe('Timespan', () => {
       const updatedDate = Timespan.fromMonths(amountToAdd);
       const expected = 3;
       expect(updatedDate.toMonths()).toBe(expected);
+    });
+
+    it('should create timespan from years', () => {
+      const amountToAdd = 2;
+      const startDateInMilliseconds = startDate.getTime();
+      const endDateInMilliseconds = new Date(
+        startDate.getTime() + amountToAdd,
+      ).getTime();
+      const updatedDate = Timespan.fromYears(amountToAdd);
+      const expected = endDateInMilliseconds - startDateInMilliseconds;
+      expect(updatedDate.toYears()).toBe(expected);
     });
 
     it('should create timespan from years', () => {

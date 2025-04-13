@@ -1,5 +1,6 @@
-import { DayUnit } from '../units-of-time';
 import { DateUnitConverter } from './date-unit-converter';
+import Constants from '../constants';
+import { DayUnit } from '../types';
 
 /**
  * Represents a converter for the day unit.
@@ -24,10 +25,10 @@ export class DayConverter extends DateUnitConverter {
    * The number of milliseconds per day.
    */
   public readonly millisecondsPerUnit =
-    DateUnitConverter.hoursInADay *
-    DateUnitConverter.minutesInAnHour *
-    DateUnitConverter.secondsInAMinute *
-    DateUnitConverter.millisecondsInASecond;
+    Constants.HoursPerDay *
+    Constants.MinutesPerHour *
+    Constants.SecondsPerMinute *
+    Constants.MillisecondsPerSecond;
 
   /**
    * An array of aliases for the day unit.

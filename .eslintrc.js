@@ -14,6 +14,7 @@ module.exports = {
       'error',
       {
         semi: true,
+        endOfLine: 'auto',
       },
     ],
     'no-underscore/no-underscore': [

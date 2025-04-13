@@ -1,20 +1,70 @@
-# Working with Timespans in JavaScript using the Timespan Class
+# Timespan — Intuitive Time Interval Calculations in JavaScript
 
-When dealing with time durations or intervals in JavaScript, it's often useful to have a reliable way to represent and manipulate them. The `Timespan` class provides a convenient and powerful solution for working with timespans in JavaScript.
+When dealing with time durations or intervals in JavaScript, it's often useful to have a reliable way to represent and
+manipulate them. The `Timespan` class provides a convenient and powerful solution for working with timespans in
+JavaScript.
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/mikejg101/timespan/publish.yml)](https://img.shields.io/github/actions/workflow/status/mikejg101/timespan/publish.yml) [![Issues Status](https://img.shields.io/github/issues/mikejg101/timespan)](https://img.shields.io/github/issues/mikejg101/timespan) [![Pull Request Status](https://img.shields.io/github/issues-pr-raw/mikejg101/timespan)](https://img.shields.io/github/issues-pr-raw/mikejg101/timespan) [![NPM Version Status](https://img.shields.io/npm/v/@undercroft/timespan)](https://img.shields.io/npm/v/@undercroft/timespan) [![License Status](https://img.shields.io/github/license/mikejg101/timespan)](https://img.shields.io/github/license/mikejg101/timespan)  
+Works in Typescript too!
+
+[![Build Status](https://img.shields.io/github/actions/workflow/status/mikejg101/timespan/publish.yml)](https://github.com/mikejg101/timespan/actions/workflows/publish.yml)
+[![Issues Status](https://img.shields.io/github/issues/mikejg101/timespan)](https://github.com/mikejg101/timespan/issues)
+[![Pull Request Status](https://img.shields.io/github/issues-pr-raw/mikejg101/timespan)](https://github.com/mikejg101/timespan/pulls)
+[![NPM Version Status](https://img.shields.io/npm/v/@undercroft/timespan)](https://www.npmjs.com/package/@undercroft/timespan)
+[![License Status](https://img.shields.io/github/license/mikejg101/timespan)](https://github.com/mikejg101/timespan/blob/main/LICENSE)
+[![Bundle Size](https://img.shields.io/bundlephobia/minzip/@undercroft/timespan)](https://bundlephobia.com/package/@undercroft/timespan)
+[![Install Size](https://packagephobia.com/badge?p=@undercroft/timespan)](https://packagephobia.com/result?p=@undercroft/timespan)
+[![Coverage Status](https://coveralls.io/repos/github/mikejg101/timespan/badge.svg?branch=main)](https://coveralls.io/github/mikejg101/timespan?branch=main)
+[![Known Vulnerabilities](https://snyk.io/test/npm/@undercroft/timespan/badge.svg)](https://snyk.io/test/npm/@undercroft/timespan)
+
+# UMD Support
+
+Starting with version 1.1.0, you can use Timespan directly in the browser via the UMD build. All public methods are
+supported.
+
+#  Distribution & Compatibility
+- Small bundle footprint (<4kB brotli-compressed)
+- Works in Node.js, modern browsers, and bundlers
+
+# Test Coverage & CI
+- Full unit test coverage with Jest
+- Automatically tested on Ubuntu and Windows
+- Bundle size tracked via Size Limit
+- Code coverage reported via Codecov
+
+# Breaking Changes (as of 1.1.0)
+- Removed internal module access — All usage must go through the public Timespan export
+- Internal validation and type guards added
+- Removed legacy and deprecated utility modules
 
 # Installation
+
+## Usage in NodeJS
 
 ```shell
 npm install @undercroft/timespan
 ```
 
-Usage
-To use the Timespan class in your JavaScript project, import it as follows:
+Then use it like this.
 
 ```javascript
 import { Timespan } from '@undercroft/timespan';
+```
+
+## Usage in Browser
+
+```angular2html
+
+<script src="https://cdn.jsdelivr.net/npm/@undercroft/timespan/dist/index.umd.js"></script>
+```
+
+Then use it like this.
+
+```html
+
+<script>
+  const span = new window.Timespan(new Date(), new Date());
+  console.log(span.toMilliseconds());
+</script>
 ```
 
 # Creating Timespans
@@ -33,7 +83,9 @@ console.log(timespan.toString()); // Output: '3d 5h 30m'
 console.log(timespan.toHours()); // Output: 77.5
 ```
 
-In the example above, we create a `Timespan` object from an input string using the `fromString` method. The input string specifies a timespan of 3 days, 5 hours, and 30 minutes. We then output the string representation of the timespan using `toString()` and calculate the total duration in hours using `toHours()`.
+In the example above, we create a `Timespan` object from an input string using the `fromString` method. The input string
+specifies a timespan of 3 days, 5 hours, and 30 minutes. We then output the string representation of the timespan using
+`toString()` and calculate the total duration in hours using `toHours()`.
 
 # Creating a Timespan with Start and End Dates
 
@@ -47,7 +99,8 @@ const timespan = new Timespan(start, end);
 console.log(timespan.toDays()); // Output: 14
 ```
 
-In this example, we create a `Timespan` object by providing the start and end dates directly. We then calculate the total duration in days using `toDays()`.
+In this example, we create a `Timespan` object by providing the start and end dates directly. We then calculate the
+total duration in days using `toDays()`.
 
 # Retrieving Timespan Information
 
@@ -73,7 +126,10 @@ console.log(timespan.toTimeframe());
 console.log(timespan.toMilliseconds());
 ```
 
-In the example above, we retrieve the start and end dates of the timespan using the start and end properties. We also obtain the timespan represented as a TimeFrame object using `toTimeframe()`, which provides the individual components of the timespan such as years, months, weeks, days, hours, minutes, seconds, and milliseconds. Lastly, we calculate the total duration in milliseconds using `toMilliseconds()`.
+In the example above, we retrieve the start and end dates of the timespan using the start and end properties. We also
+obtain the timespan represented as a TimeFrame object using `toTimeframe()`, which provides the individual components of
+the timespan such as years, months, weeks, days, hours, minutes, seconds, and milliseconds. Lastly, we calculate the
+total duration in milliseconds using `toMilliseconds()`.
 
 # Converting Timespans
 
@@ -92,7 +148,8 @@ console.log(timespan.toMonths()); // Output: 0
 console.log(timespan.toYears()); // Output: 0
 ```
 
-In this example, we convert the timespan to various units such as hours, weeks, months, and years using the respective conversion methods.
+In this example, we convert the timespan to various units such as hours, weeks, months, and years using the respective
+conversion methods.
 
 # More Examples of Creating TimeSpans
 
@@ -107,6 +164,7 @@ import { Timespan } from '@undercroft/timespan';
 const timespan = Timespan.fromMilliseconds(5000);
 Timespan.fromSeconds(seconds, startDate);
 ```
+
 Creates a Timespan object from a specified number of seconds.
 
 ```js
@@ -115,6 +173,7 @@ import { Timespan } from '@undercroft/timespan';
 const timespan = Timespan.fromSeconds(120);
 Timespan.fromMinutes(minutes, startDate);
 ```
+
 Creates a Timespan object from a specified number of minutes.
 
 ```js
@@ -123,6 +182,7 @@ import { Timespan } from '@undercroft/timespan';
 const timespan = Timespan.fromMinutes(60);
 Timespan.fromHours(hours, startDate);
 ```
+
 Creates a Timespan object from a specified number of hours.
 
 ```js
@@ -131,6 +191,7 @@ import { Timespan } from '@undercroft/timespan';
 const timespan = Timespan.fromHours(24);
 Timespan.fromDays(days, startDate);
 ```
+
 Creates a Timespan object from a specified number of days.
 
 ```js
@@ -139,6 +200,7 @@ import { Timespan } from '@undercroft/timespan';
 const timespan = Timespan.fromDays(7);
 Timespan.fromWeeks(weeks, startDate);
 ```
+
 Creates a Timespan object from a specified number of weeks.
 
 ```js
@@ -147,6 +209,7 @@ import { Timespan } from '@undercroft/timespan';
 const timespan = Timespan.fromWeeks(4);
 Timespan.fromMonths(months, startDate);
 ```
+
 Creates a Timespan object from a specified number of months.
 
 ```js
@@ -155,6 +218,7 @@ import { Timespan } from '@undercroft/timespan';
 const timespan = Timespan.fromMonths(6);
 Timespan.fromYears(years, startDate);
 ```
+
 Creates a Timespan object from a specified number of years.
 
 ```js
@@ -162,8 +226,10 @@ import { Timespan } from '@undercroft/timespan';
 
 const timespan = Timespan.fromYears(2);
 ```
+
 Performing Calculations and Comparisons
-Once you have a Timespan object, you can perform various calculations and comparisons using the provided methods. Here are some examples:
+Once you have a Timespan object, you can perform various calculations and comparisons using the provided methods. Here
+are some examples:
 
 ```js
 import { Timespan } from '@undercroft/timespan';
@@ -176,10 +242,14 @@ const subtractedTimespan = timespan2.subtract(timespan1);
 const areEqual = timespan1.equals(timespan2);
 const comparisonResult = timespan1.compareTo(timespan2);
 ```
+
 Please refer to the API documentation, or the source code for more details on the available methods and their usage.
 
 ## Contributing
-Contributions to the Timespan class are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request on the GitHub repository.
+
+Contributions to the Timespan class are welcome! If you find any issues or have suggestions for improvements, please
+open an issue or submit a pull request on the GitHub repository.
 
 ## License
+
 The Timespan class is licensed under the MIT License. See the LICENSE file for more information.

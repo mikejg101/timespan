@@ -1,5 +1,6 @@
-import { HourUnit } from '../units-of-time';
 import { DateUnitConverter } from './date-unit-converter';
+import Constants from '../constants';
+import { HourUnit } from '../types';
 
 /**
  * Represents a converter for the hour unit.
@@ -24,9 +25,9 @@ export class HourConverter extends DateUnitConverter {
    * The number of milliseconds per hour.
    */
   public readonly millisecondsPerUnit =
-    DateUnitConverter.minutesInAnHour *
-    DateUnitConverter.secondsInAMinute *
-    DateUnitConverter.millisecondsInASecond;
+    Constants.MinutesPerHour *
+    Constants.SecondsPerMinute *
+    Constants.MillisecondsPerSecond;
 
   /**
    * An array of aliases for the hour unit.

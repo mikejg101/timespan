@@ -1,5 +1,6 @@
-import { MonthUnit } from '../units-of-time';
 import { DateUnitConverter } from './date-unit-converter';
+import Constants from '../constants';
+import { MonthUnit } from '../types';
 
 /**
  * Represents a converter for the month unit.
@@ -52,8 +53,7 @@ export class MonthConverter extends DateUnitConverter {
     const endDay = endDate.getUTCDate();
 
     let months =
-      (endYear - startYear) * DateUnitConverter.monthsInAYear +
-      (endMonth - startMonth);
+      (endYear - startYear) * Constants.MonthsPerYear + (endMonth - startMonth);
     if (endDay < startDay) {
       months--;
     }

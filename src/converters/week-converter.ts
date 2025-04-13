@@ -1,5 +1,6 @@
-import { WeekUnit } from '../units-of-time';
 import { DateUnitConverter } from './date-unit-converter';
+import Constants from '../constants';
+import { WeekUnit } from '../types';
 
 /**
  * Represents a converter for the week unit.
@@ -24,11 +25,11 @@ export class WeekConverter extends DateUnitConverter {
    * The number of milliseconds per week.
    */
   public readonly millisecondsPerUnit =
-    DateUnitConverter.daysInAWeek *
-    DateUnitConverter.hoursInADay *
-    DateUnitConverter.minutesInAnHour *
-    DateUnitConverter.secondsInAMinute *
-    DateUnitConverter.millisecondsInASecond;
+    Constants.DaysPerWeek *
+    Constants.HoursPerDay *
+    Constants.MinutesPerHour *
+    Constants.SecondsPerMinute *
+    Constants.MillisecondsPerSecond;
 
   /**
    * An array of aliases for the week unit.

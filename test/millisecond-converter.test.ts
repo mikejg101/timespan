@@ -1,4 +1,4 @@
-import { MillisecondConverter } from '../src/converters/millisecond-convert';
+import { MillisecondConverter } from '../src/converters/millisecond-converter';
 
 describe('MillisecondConverter', () => {
   let millisecondConverter: MillisecondConverter;

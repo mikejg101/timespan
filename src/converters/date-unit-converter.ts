@@ -1,18 +1,10 @@
+import Constants from '../constants';
+import { TimeUnit } from '../types';
+
 /**
  * Represents a converter for a specific date unit.
  */
 export abstract class DateUnitConverter {
-  public static readonly monthsInAYear = 12;
-  public static readonly daysInAYear = 365;
-  public static readonly daysInAWeek = 7;
-  public static readonly hoursInADay = 24;
-  public static readonly minutesInAnHour = 60;
-  public static readonly secondsInAMinute = 60;
-  public static readonly millisecondsInASecond = 1000;
-  public static readonly leapYearDivisor = 4;
-  public static readonly centuryDivisor = 100;
-  public static readonly quadricentennialDivisor = 400;
-
   /**
    * The default name of the date unit.
    */
@@ -31,7 +23,7 @@ export abstract class DateUnitConverter {
   /**
    * An array of aliases for the date unit.
    */
-  public abstract aliases: Array<string>;
+  public abstract aliases: Array<TimeUnit>;
 
   /**
    * The number of milliseconds per unit for conversions.
@@ -68,14 +60,14 @@ export abstract class DateUnitConverter {
   }
 
   private static isDivisibleByLeapYearDivisor(year: number): boolean {
-    return year % DateUnitConverter.leapYearDivisor === 0;
+    return year % Constants.LeapYearDivisor === 0;
   }
 
   private static isDivisibleByCenturyDivisor(year: number): boolean {
-    return year % DateUnitConverter.centuryDivisor === 0;
+    return year % Constants.CenturyDivisor === 0;
   }
 
   private static isDivisibleByQuadricentennialDivisor(year: number): boolean {
-    return year % DateUnitConverter.quadricentennialDivisor === 0;
+    return year % Constants.QuadricentennialDivisor === 0;
   }
 }
