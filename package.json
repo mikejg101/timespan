@@ -37,7 +37,6 @@
     "test:cov": "jest --coverage --no-cache --runInBand",
     "addscope": "ts-node tools/undertools.ts update name @undercroft/timespan",
     "badge:cov": "npx lcov-badge-generator -o ./badges/coverage.svg ./coverage/lcov.info",
-    "docs": "typedoc",
     "check": "./.husky/pre-commit",
     "sandbox": "ts-node ./sandbox.ts",
     "size": "size-limit"
@@ -75,9 +74,6 @@
     "ts-loader": "^9.2.5",
     "ts-node": "^10.9.1",
     "tsup": "^8.4.0",
-    "typedoc": "^0.24.7",
-    "typedoc-github-wiki-theme": "^1.1.0",
-    "typedoc-plugin-markdown": "^3.15.3",
     "typescript": "^4.9.5"
   }
 }
