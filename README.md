@@ -21,6 +21,14 @@ Works in Typescript too!
 Starting with version 1.1.0, you can use Timespan directly in the browser via the UMD build. All public methods are
 supported.
 
+## CDNs
+- jsDelivr: `https://cdn.jsdelivr.net/npm/@undercroft/timespan/dist/index.umd.js`
+- unpkg: `https://unpkg.com/@undercroft/timespan/dist/index.umd.js`
+- Skypack: `https://cdn.skypack.dev/@undercroft/timespan`
+- esm.sh: `https://esm.sh/@undercroft/timespan`
+- jspm: `https://jspm.dev/@undercroft/timespan`
+- esm.run: `https://esm.run/@undercroft/timespan`
+
 #  Distribution & Compatibility
 - Small bundle footprint (<4kB brotli-compressed)
 - Works in Node.js, modern browsers, and bundlers
