@@ -13,7 +13,7 @@ Works in Typescript too!
 [![License Status](https://img.shields.io/github/license/mikejg101/timespan)](https://github.com/mikejg101/timespan/blob/main/LICENSE)
 [![Bundle Size](https://img.shields.io/bundlephobia/minzip/@undercroft/timespan)](https://bundlephobia.com/package/@undercroft/timespan)
 [![Install Size](https://packagephobia.com/badge?p=@undercroft/timespan)](https://packagephobia.com/result?p=@undercroft/timespan)
-[![Coverage Status](https://coveralls.io/repos/github/mikejg101/timespan/badge.svg?branch=main)](https://coveralls.io/github/mikejg101/timespan?branch=main)
+[![codecov](https://codecov.io/gh/mikejg101/timespan/graph/badge.svg?token=XLOYLAS2X1)](https://codecov.io/gh/mikejg101/timespan)
 [![Known Vulnerabilities](https://snyk.io/test/npm/@undercroft/timespan/badge.svg)](https://snyk.io/test/npm/@undercroft/timespan)
 
 # UMD Support
