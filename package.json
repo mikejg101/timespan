@@ -38,11 +38,13 @@
     "badge:cov": "npx lcov-badge-generator -o ./badges/coverage.svg ./coverage/lcov.info",
     "docs": "typedoc",
     "check": "./.husky/pre-commit",
-    "sandbox": "ts-node ./sandbox.ts"
+    "sandbox": "ts-node ./sandbox.ts",
+    "size": "size-limit"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^13.1.0",
+    "@size-limit/preset-small-lib": "^11.2.0",
     "@swc/core": "^1.11.20",
     "@types/intersect": "^1.0.0",
     "@types/jest": "^27.0.1",
@@ -64,6 +66,7 @@
     "pinst": "^2.1.6",
     "prettier": "^2.4.0",
     "semver": "^7.5.1",
+    "size-limit": "^11.2.0",
     "ts-jest": "^27.0.5",
     "ts-loader": "^9.2.5",
     "ts-node": "^10.9.1",
