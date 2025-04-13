@@ -24,7 +24,7 @@
     "postinstall": "husky install",
     "prepublishOnly": "pinst --disable && npm run test:dist",
     "postpublish": "pinst --enable",
-    "build": "ts-node tools/undertools.ts clean && tsup src/index.ts --dts --format esm,cjs --out-dir dist",
+    "build": "ts-node tools/undertools.ts clean && tsup src/index.ts --dts --format esm,cjs --out-dir dist --minify",
     "license-check": "ts-node tools/undertools.ts licenses-check",
     "dep-check": "ts-node tools/undertools.ts dependencies-check",
     "clean": "ts-node tools/undertools.ts clean",
