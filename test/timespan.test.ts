@@ -523,4 +523,36 @@ describe('Timespan', () => {
       expect(updatedDate.toYears()).toBe(expected);
     });
   });
+
+  describe('equals', () => {
+    it('should return true for equal timespans checked by duration', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(start, end);
+      expect(timespan1.equals(timespan2)).toBe(true);
+    });
+
+    it('should return false for different timespans checked by duration', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(
+        new Date('2022-01-01T06:24:00Z'),
+        new Date('2023-02-22T10:52:00Z'),
+      );
+      expect(timespan1.equals(timespan2)).toBe(false);
+    });
+
+    it('should return true for equal timespans checked by range', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(start, end);
+      expect(timespan1.equals(timespan2, 'range')).toBe(true);
+    });
+
+    it('should return false for different timespans checked by range', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(
+        new Date('2022-01-01T06:24:00Z'),
+        new Date('2023-02-22T10:52:00Z'),
+      );
+      expect(timespan1.equals(timespan2, 'range')).toBe(false);
+    });
+  });
 });
