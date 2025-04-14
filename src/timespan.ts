@@ -223,6 +223,21 @@ export class Timespan {
     this.fromUnits(years, 'years', startDate);
 
   /**
+   * Check if two timespans are equal.
+   * @param ts1 - The first Timespan to compare.
+   * @param ts2 - The second Timespan to compare.
+   * @param compareBy - The method of comparison: 'range' for start and end dates, 'duration' for total duration.
+   * @returns True if the two timespans are equal, false otherwise.
+   */
+  public static equals(
+    ts1: Timespan,
+    ts2: Timespan,
+    compareBy: 'range' | 'duration' = 'duration',
+  ): boolean {
+    return ts1.equals(ts2, compareBy);
+  }
+
+  /**
    * Convert the timespan to a TimeFrame object.
    * @returns The TimeFrame object representing the timespan.
    */
