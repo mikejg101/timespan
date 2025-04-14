@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 import { Timespan } from '../src';
 
 describe('Timespan', () => {
@@ -521,6 +523,118 @@ describe('Timespan', () => {
       const updatedDate = Timespan.fromYears(amountToAdd);
       const expected = endDateInMilliseconds - startDateInMilliseconds;
       expect(updatedDate.toYears()).toBe(expected);
+    });
+  });
+
+  describe('equals', () => {
+    it('should return true for equal timespans checked by duration', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(start, end);
+      expect(timespan1.equals(timespan2)).toBe(true);
+    });
+
+    it('should return false for different timespans checked by duration', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(
+        new Date('2022-01-01T06:24:00Z'),
+        new Date('2023-02-22T10:52:00Z'),
+      );
+      expect(timespan1.equals(timespan2)).toBe(false);
+    });
+
+    it('should return true for equal timespans checked by range', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(start, end);
+      expect(timespan1.equals(timespan2, 'range')).toBe(true);
+    });
+
+    it('should return false for different timespans checked by range', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(
+        new Date('2022-01-01T06:24:00Z'),
+        new Date('2023-02-22T10:52:00Z'),
+      );
+      expect(timespan1.equals(timespan2, 'range')).toBe(false);
+    });
+  });
+
+  describe('static equals', () => {
+    it('should return true for equal timespans checked by duration', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(start, end);
+      expect(Timespan.equals(timespan1, timespan2)).toBe(true);
+    });
+
+    it('should return false for different timespans checked by duration', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(
+        new Date('2022-01-01T06:24:00Z'),
+        new Date('2023-02-22T10:52:00Z'),
+      );
+      expect(Timespan.equals(timespan1, timespan2)).toBe(false);
+    });
+
+    it('should return true for equal timespans checked by range', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(start, end);
+      expect(Timespan.equals(timespan1, timespan2, 'range')).toBe(true);
+    });
+
+    it('should return false for different timespans checked by range', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(
+        new Date('2022-01-01T06:24:00Z'),
+        new Date('2023-02-22T10:52:00Z'),
+      );
+      expect(Timespan.equals(timespan1, timespan2, 'range')).toBe(false);
+    });
+  });
+
+  describe('compareTo', () => {
+    it('should return 0 if the timespan is equal to the provided timespan', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(start, end);
+      expect(timespan1.compareTo(timespan2)).toBe(0);
+    });
+    it('should return -1 if the timespan is less than to the provided timespan', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(
+        new Date('2022-01-01T06:24:00Z'),
+        new Date('2023-02-22T10:52:00Z'),
+      );
+      expect(timespan1.compareTo(timespan2)).toBe(-1);
+    });
+    it('should return 1 if the timespan is greater than to the provided timespan', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(
+        new Date('2022-01-01T06:24:00Z'),
+        new Date('2023-02-22T10:52:00Z'),
+      );
+      expect(timespan2.compareTo(timespan1)).toBe(1);
+    });
+  });
+
+  describe('static compareTo', () => {
+    it('should return 0 if the timespan is equal to the provided timespan', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(start, end);
+      expect(Timespan.compareTo(timespan1, timespan2)).toBe(0);
+    });
+    it('should return -1 if the timespan is less than to the provided timespan', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(
+        new Date('2022-01-01T06:24:00Z'),
+        new Date('2023-02-22T10:52:00Z'),
+      );
+      expect(Timespan.compareTo(timespan1, timespan2)).toBe(-1);
+    });
+    it('should return 1 if the timespan is greater than to the provided timespan', () => {
+      const timespan1 = new Timespan(start, end);
+      const timespan2 = new Timespan(
+        new Date('2022-01-01T06:24:00Z'),
+        new Date('2023-02-22T10:52:00Z'),
+      );
+      expect(Timespan.compareTo(timespan2, timespan1)).toBe(1);
     });
   });
 });

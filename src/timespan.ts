@@ -223,6 +223,32 @@ export class Timespan {
     this.fromUnits(years, 'years', startDate);
 
   /**
+   * Check if two timespans are equal.
+   * @param ts1 - The first Timespan to compare.
+   * @param ts2 - The second Timespan to compare.
+   * @param compareBy - The method of comparison: 'range' for start and end dates, 'duration' for total duration.
+   * @returns True if the two timespans are equal, false otherwise.
+   */
+  public static equals(
+    ts1: Timespan,
+    ts2: Timespan,
+    compareBy: 'range' | 'duration' = 'duration',
+  ): boolean {
+    return ts1.equals(ts2, compareBy);
+  }
+
+  /**
+   * Compare two timespans.
+   * @param ts1 - The first Timespan to compare.
+   * @param ts2 - The second Timespan to compare.
+   * @returns A negative number if ts1 is less than ts2, a positive number if
+   * ts1 is greater than ts2, and 0 if they are equal.
+   */
+  public static compareTo = (ts1: Timespan, ts2: Timespan): number => {
+    return ts1.compareTo(ts2);
+  };
+
+  /**
    * Convert the timespan to a TimeFrame object.
    * @returns The TimeFrame object representing the timespan.
    */
@@ -292,4 +318,40 @@ export class Timespan {
    * @returns The duration in years.
    */
   public toYears = (): number => this.toUnit('years');
+
+  /**
+   * Check if two timespans are equal.
+   * @param other - The other Timespan to compare with.
+   * @param compareBy - The method of comparison: 'range' for start and end dates, 'duration' for total duration.
+   * @returns True if the two timespans are equal, false otherwise.
+   */
+  public equals(
+    other: Timespan,
+    compareBy: 'range' | 'duration' = 'duration',
+  ): boolean {
+    if (compareBy === 'range') {
+      return (
+        this.start.getTime() === other.start.getTime() &&
+        this.end.getTime() === other.end.getTime()
+      );
+    }
+    return this.toMilliseconds() === other.toMilliseconds();
+  }
+
+  /**
+   * Compare this timespan to another timespan.
+   * @param other - The other Timespan to compare with.
+   * @returns A negative number if this timespan is less than the other,
+   */
+  public compareTo = (other: Timespan): number => {
+    const thisMillis = this.toMilliseconds();
+    const otherMillis = other.toMilliseconds();
+    if (thisMillis < otherMillis) {
+      return -1;
+    }
+    if (thisMillis > otherMillis) {
+      return 1;
+    }
+    return 0;
+  };
 }
