@@ -292,4 +292,23 @@ export class Timespan {
    * @returns The duration in years.
    */
   public toYears = (): number => this.toUnit('years');
+
+  /**
+   * Check if two timespans are equal.
+   * @param other - The other Timespan to compare with.
+   * @param compareBy - The method of comparison: 'range' for start and end dates, 'duration' for total duration.
+   * @returns True if the two timespans are equal, false otherwise.
+   */
+  public equals(
+    other: Timespan,
+    compareBy: 'range' | 'duration' = 'duration',
+  ): boolean {
+    if (compareBy === 'range') {
+      return (
+        this.start.getTime() === other.start.getTime() &&
+        this.end.getTime() === other.end.getTime()
+      );
+    }
+    return this.toMilliseconds() === other.toMilliseconds();
+  }
 }
